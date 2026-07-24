@@ -1,0 +1,2 @@
+import Button from '../components/common/Button';
+export default function NotFound(){return <main className="grid min-h-[55vh] place-items-center px-5 text-center"><section><p className="font-serif text-8xl font-bold text-[#79259c]">404</p><h2 className="mt-4 text-2xl font-bold">Page Not Found</h2><p className="mt-2 text-slate-600">The page you requested is unavailable or has moved.</p><a className="mt-6 inline-block" href="#/"><Button>Back to Home</Button></a></section></main>}

@@ -1,0 +1,1 @@
+export default function Loader({label='Loading...'}){return <div className="flex min-h-[260px] items-center justify-center gap-3 text-sm font-semibold text-[#79259c]"><i className="h-7 w-7 animate-spin rounded-full border-4 border-[#eddaf3] border-t-[#79259c]"/>{label}</div>}

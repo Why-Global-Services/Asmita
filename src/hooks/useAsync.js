@@ -1,0 +1,2 @@
+import {useEffect,useState} from 'react';
+export default function useAsync(action,deps=[]){const [state,setState]=useState({loading:true,data:null,error:null});useEffect(()=>{let alive=true;setState(s=>({...s,loading:true}));action().then(data=>alive&&setState({loading:false,data,error:null})).catch(error=>alive&&setState({loading:false,data:null,error}));return()=>{alive=false}},deps);return state}
