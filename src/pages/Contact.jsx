@@ -1,2 +1,67 @@
-import {useState} from 'react';import PageHero from '../components/layout/PageHero';import Button from '../components/common/Button';
-export default function Contact(){const [sent,setSent]=useState(false);return <><PageHero title="Contact Us"/><main className="mx-auto grid max-w-6xl gap-10 px-5 py-12 md:grid-cols-2 sm:px-8"><section><p className="text-xs font-bold tracking-widest text-[#79259c]">GET IN TOUCH</p><h2 className="mt-3 font-serif text-4xl">We would love to hear from you</h2><p className="mt-4 text-slate-600">Our healthcare support team is ready to help.</p><div className="mt-7 grid gap-4 text-sm text-slate-700"><p>☎　+244 923 456 789</p><p>✉　info@asmitaangola.com</p><p>⌖　Luanda, Angola</p><p>◉　♥　◎　in</p></div><div className="mt-8 grid h-44 place-items-center rounded-xl bg-slate-100 text-sm font-bold text-slate-500">Map location — Luanda, Angola</div></section><form className="grid gap-4 rounded-xl border border-slate-200 p-6 shadow-sm" onSubmit={e=>{e.preventDefault();setSent(true)}}><input className="rounded border border-slate-200 p-3" required placeholder="Your name"/><input className="rounded border border-slate-200 p-3" required type="email" placeholder="Email address"/><input className="rounded border border-slate-200 p-3" placeholder="Phone number"/><textarea className="min-h-32 rounded border border-slate-200 p-3" required placeholder="How can we help?"/>{sent?<b className="rounded bg-[#f7eafb] p-3 text-[#79259c]">Thank you — we will be in touch shortly.</b>:<Button type="submit">Send Message</Button>}</form></main></>}
+import { useState } from "react";
+import PageHero from "../components/layout/PageHero";
+import Button from "../components/common/Button";
+export default function Contact() {
+  const [sent, setSent] = useState(false);
+  return (
+    <>
+      <PageHero title="Contact Us" />
+      <main className="mx-auto grid max-w-6xl gap-10 px-5 py-12 md:grid-cols-2 sm:px-8">
+        <section>
+          <p className="text-xs font-bold tracking-widest text-[#79259c]">
+            GET IN TOUCH
+          </p>
+          <h2 className="mt-3 font-serif text-4xl">
+            We would love to hear from you
+          </h2>
+          <p className="mt-4 text-slate-600">
+            Our healthcare support team is ready to help.
+          </p>
+          <div className="mt-7 grid gap-4 text-sm text-slate-700">
+            <p>☎　+244 923 456 789</p>
+            <p>✉　info@asmitaangola.com</p>
+            <p>⌖　Luanda, Angola</p>
+            <p>◉　♥　◎　in</p>
+          </div>
+          <div className="mt-8 grid h-44 place-items-center rounded-xl bg-slate-100 text-sm font-bold text-slate-500">
+            Map location — Luanda, Angola
+          </div>
+        </section>
+        <form
+          className="grid gap-4 rounded-xl border border-slate-200 p-6 shadow-sm"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setSent(true);
+          }}>
+          <input
+            className="rounded border border-slate-200 p-3"
+            required
+            placeholder="Your name"
+          />
+          <input
+            className="rounded border border-slate-200 p-3"
+            required
+            type="email"
+            placeholder="Email address"
+          />
+          <input
+            className="rounded border border-slate-200 p-3"
+            placeholder="Phone number"
+          />
+          <textarea
+            className="min-h-32 rounded border border-slate-200 p-3"
+            required
+            placeholder="How can we help?"
+          />
+          {sent ? (
+            <b className="rounded bg-[#f7eafb] p-3 text-[#79259c]">
+              Thank you — we will be in touch shortly.
+            </b>
+          ) : (
+            <Button type="submit">Send Message</Button>
+          )}
+        </form>
+      </main>
+    </>
+  );
+}

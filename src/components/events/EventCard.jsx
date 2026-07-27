@@ -1,2 +1,32 @@
-import Button from '../common/Button';
-export default function EventCard({event}){const [day,month]=event.day.split(' ');return <article className="relative overflow-hidden rounded-xl border border-slate-200 bg-white p-2 shadow-sm"><div className="relative grid h-32 place-items-center overflow-hidden rounded-lg bg-gradient-to-br from-[#d7e3eb] to-[#f4eaf7] text-6xl"><span className="absolute left-2 top-2 rounded bg-white px-2 py-1 text-[10px] font-bold text-[#79259c]">{event.type}</span><i className="not-italic">{event.emoji}</i><b className="absolute right-2 top-0 rounded-b-lg bg-white px-3 py-2 text-2xl text-[#79259c]">{day}<small className="block text-center text-[10px]">{month}</small></b></div><div className="p-2"><h3 className="min-h-10 text-sm font-bold">{event.title}</h3><small className="mt-1 block text-[10px] text-slate-500">▧ {event.day} 2026　◷ {event.time}</small><small className="mt-1 block text-[10px] text-slate-500">⌖ {event.location}</small><a className="mt-3 inline-block" href="#/events"><Button variant="outline" className="px-3 py-1 text-xs">View Details</Button></a></div></article>}
+import Button from "../common/Button";
+export default function EventCard({ event }) {
+  const [day, month] = event.day.split(" ");
+  return (
+    <article className="relative overflow-hidden rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
+      <div className="relative grid h-32 place-items-center overflow-hidden rounded-lg bg-gradient-to-br from-[#d7e3eb] to-[#f4eaf7] text-6xl">
+        <span className="absolute left-2 top-2 rounded bg-white px-2 py-1 text-[10px] font-bold text-[#79259c]">
+          {event.type}
+        </span>
+        <i className="not-italic">{event.emoji}</i>
+        <b className="absolute right-2 top-0 rounded-b-lg bg-white px-3 py-2 text-2xl text-[#79259c]">
+          {day}
+          <small className="block text-center text-[10px]">{month}</small>
+        </b>
+      </div>
+      <div className="p-2">
+        <h3 className="min-h-10 text-sm font-bold">{event.title}</h3>
+        <small className="mt-1 block text-[10px] text-slate-500">
+          ▧ {event.day} 2026　◷ {event.time}
+        </small>
+        <small className="mt-1 block text-[10px] text-slate-500">
+          ⌖ {event.location}
+        </small>
+        <a className="mt-3 inline-block" href="#/events">
+          <Button variant="outline" className="px-3 py-1 text-xs">
+            View Details
+          </Button>
+        </a>
+      </div>
+    </article>
+  );
+}

@@ -1,1 +1,24 @@
-export default function Pagination({page=1,totalPages=4,onChange}){return <nav aria-label="Pagination" className="mt-8 flex justify-center gap-2"><button className="rounded border border-slate-200 px-3 py-1.5 hover:bg-[#faf4fc]" onClick={()=>onChange?.(Math.max(1,page-1))}>‹</button>{Array.from({length:totalPages},(_,i)=><button key={i} className={`rounded border px-3 py-1.5 ${page===i+1?'border-[#79259c] bg-[#79259c] text-white':'border-slate-200 hover:bg-[#faf4fc]'}`} onClick={()=>onChange?.(i+1)}>{i+1}</button>)}<button className="rounded border border-slate-200 px-3 py-1.5 hover:bg-[#faf4fc]" onClick={()=>onChange?.(Math.min(totalPages,page+1))}>›</button></nav>}
+export default function Pagination({ page = 1, totalPages = 4, onChange }) {
+  return (
+    <nav aria-label="Pagination" className="mt-8 flex justify-center gap-2">
+      <button
+        className="rounded border border-slate-200 px-3 py-1.5 hover:bg-[#faf4fc]"
+        onClick={() => onChange?.(Math.max(1, page - 1))}>
+        ‹
+      </button>
+      {Array.from({ length: totalPages }, (_, i) => (
+        <button
+          key={i}
+          className={`rounded border px-3 py-1.5 ${page === i + 1 ? "border-[#79259c] bg-[#79259c] text-white" : "border-slate-200 hover:bg-[#faf4fc]"}`}
+          onClick={() => onChange?.(i + 1)}>
+          {i + 1}
+        </button>
+      ))}
+      <button
+        className="rounded border border-slate-200 px-3 py-1.5 hover:bg-[#faf4fc]"
+        onClick={() => onChange?.(Math.min(totalPages, page + 1))}>
+        ›
+      </button>
+    </nav>
+  );
+}

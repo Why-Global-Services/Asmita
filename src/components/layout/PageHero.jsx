@@ -1,2 +1,31 @@
-import Breadcrumb from '../common/Breadcrumb';
-export default function PageHero({title,subtitle}){return <section className="overflow-hidden bg-gradient-to-r from-[#fbf3fd] via-[#f7edf9] to-[#ebd9f1]"><div className="mx-auto flex min-h-[190px] max-w-7xl items-center justify-between px-5 py-8 sm:px-8"><div><h1 className="font-serif text-4xl font-semibold text-[#371046] sm:text-5xl">{title}</h1>{subtitle&&<><h3 className="mt-3 text-base font-bold text-slate-800">{subtitle}</h3><p className="mt-1 max-w-xl text-sm text-slate-600">Discover quality healthcare solutions designed for better wellbeing.</p></>}<Breadcrumb items={[{label:title}]}/></div><div aria-hidden="true" className="hidden text-6xl text-[#8f53ae] opacity-70 md:block">✚　🩺　▣</div></div></section>}
+import Breadcrumb from "../common/Breadcrumb";
+export default function PageHero({ title, subtitle }) {
+  return (
+    <section className="overflow-hidden bg-gradient-to-r from-[#fbf3fd] via-[#f7edf9] to-[#ebd9f1]">
+      <div className="mx-auto flex min-h-[190px] max-w-7xl items-center justify-between px-5 py-8 sm:px-8">
+        <div>
+          <h1 className="font-serif text-4xl font-semibold text-[#371046] sm:text-5xl">
+            {title}
+          </h1>
+          {subtitle && (
+            <>
+              <h3 className="mt-3 text-base font-bold text-slate-800">
+                {subtitle}
+              </h3>
+              <p className="mt-1 max-w-xl text-sm text-slate-600">
+                Discover quality healthcare solutions designed for better
+                wellbeing.
+              </p>
+            </>
+          )}
+          <Breadcrumb items={[{ label: title }]} />
+        </div>
+        <div
+          aria-hidden="true"
+          className="hidden text-6xl text-[#8f53ae] opacity-70 md:block">
+          ✚　🩺　▣
+        </div>
+      </div>
+    </section>
+  );
+}
