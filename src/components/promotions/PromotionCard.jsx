@@ -29,14 +29,12 @@
 // }
 
 
-
-
 import Button from "../common/Button";
 import { date } from "../../utils/formatters";
 
 export default function PromotionCard({ promotion }) {
   return (
-    <article className="relative overflow-hidden rounded-xl border border-[#ead7ef] bg-gradient-to-br from-white to-[#f1dcf5] p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg sm:min-h-[255px] sm:p-7">
+    <article className="relative flex flex-col overflow-hidden rounded-xl border border-[#ead7ef] bg-gradient-to-br from-white to-[#f1dcf5] p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg sm:min-h-[255px] sm:p-7">
       {/* Label & Badge */}
       <div className="flex items-start justify-between gap-3">
         <span className="text-xs font-bold uppercase tracking-wider text-[#79259c]">
@@ -49,7 +47,7 @@ export default function PromotionCard({ promotion }) {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 mt-5">
+      <div className="relative z-10 mt-5 flex flex-1 flex-col">
         <h3 className="max-w-full font-serif text-2xl leading-tight text-[#301334] sm:max-w-[220px] sm:text-3xl">
           {promotion.title}
         </h3>
@@ -62,7 +60,7 @@ export default function PromotionCard({ promotion }) {
           Expires {date(promotion.expiresAt)}
         </small>
 
-        <a href="#/products" className="mt-5 inline-block">
+        <a href="#/products" className="mt-5 py-4 inline-block sm:mt-auto">
           <Button className="w-full sm:w-auto">
             Enquiry Now
           </Button>
