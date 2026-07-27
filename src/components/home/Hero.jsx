@@ -42,7 +42,9 @@ export default function Hero() {
           className="absolute left-2 top-1/2 z-20 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-white text-2xl text-slate-500 shadow transition hover:text-[#79259c] sm:left-4 sm:h-10 sm:w-10 sm:text-3xl"
           onClick={() => change(-1)}
         >
+              <span className="-translate-y-[4px] inline-block">
           ‹
+          </span>
         </button>
 
         {/* Content */}
@@ -84,7 +86,9 @@ export default function Hero() {
           className="absolute right-2 top-1/2 z-20 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-white text-2xl text-slate-500 shadow transition hover:text-[#79259c] sm:right-4 sm:h-10 sm:w-10 sm:text-3xl"
           onClick={() => change(1)}
         >
+           <span className="-translate-y-[4px] inline-block">
           ›
+          </span>
         </button>
 
         {/* Dots */}

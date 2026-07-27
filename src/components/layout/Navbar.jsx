@@ -105,10 +105,10 @@ export default function Navbar() {
   return (
     <>
       {/* Top Bar - Desktop Only */}
-      <div className="hidden bg-gradient-to-r from-[#5d197b] to-[#8625a7] px-5 py-3 text-xs text-white md:flex md:justify-between">
+      <div className="hidden bg-gradient-to-r from-[#5d197b] to-[#8625a7] px-5 py-3 text-sm text-white md:flex md:justify-between">
         <span>♧ High Quality Medical Products</span>
         <span>◔ 24/7 Customer Support</span>
-        <span>◉ ♥ ◎ in</span>
+        <span className="">◉ ♥ ◎ in</span>
       </div>
 
       <header className="sticky top-0 z-40 border-b border-slate-100 bg-white/95 shadow-sm backdrop-blur">

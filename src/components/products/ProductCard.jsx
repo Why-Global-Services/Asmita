@@ -76,7 +76,7 @@ export default function ProductCard({ product, onQuickView }) {
       </strong>
 
       <Button
-        className="mt-auto w-full py-2.5 text-sm"
+        className="mt-auto w-fit py-1 text-xs md:text-sm"
         onClick={() => openEnquiry(product)}
       >
         Enquiry Now
