@@ -14,22 +14,25 @@ export default function NewArrivals() {
         title="New Arrivals"
         subtitle="Discover our latest healthcare essentials."
       />
-      <section className="mx-auto max-w-7xl px-5 py-12 sm:px-8">
+      <section className="mx-auto mt-2 max-w-7xl px-4 py-10 sm:px-6 md:px-8 md:py-12">
         <div className="mb-8 text-center">
           <p className="text-xs font-bold tracking-widest text-[#79259c]">
             FRESH CARE ESSENTIALS
           </p>
-          <h2 className="mt-2 font-serif text-3xl font-semibold">
+
+          <h2 className="mt-2 font-serif text-2xl font-semibold sm:text-3xl">
             Just Arrived
           </h2>
-          <p className="mt-2 text-slate-600">
+
+          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600 sm:text-base">
             Fresh additions, selected for everyday care.
           </p>
         </div>
         {!items ? (
           <Loader />
         ) : (
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
+
             {items.map((x) => (
               <ProductCard key={x.id} product={x} />
             ))}
