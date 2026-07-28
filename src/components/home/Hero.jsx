@@ -1,4 +1,6 @@
+
 import { useState } from "react";
+import bannerImage from "../../assets/images/banner.png";
 import Button from "../common/Button";
 const slides = [
   {
@@ -27,13 +29,26 @@ export default function Hero() {
   const slide = slides[index];
   const change = (o) => setIndex((index + o + slides.length) % slides.length);
   return (
-    <section className="relative overflow-hidden bg-gradient-to-r from-white via-[#fcf4fd] to-[#edd9f2]">
-      <div className="mx-auto flex min-h-[470px] max-w-7xl items-center px-10 sm:px-16">
+    <section className="relative min-h-[470px] overflow-hidden">
+      {/* Full background image */}
+      <img
+        src={bannerImage}
+        alt="Medical care essentials"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+
+      {/* Overlay: light on left (for text), dark on right (over image) */}
+      <div className="absolute inset-0 bg-gradient-to-r from-white via-white/70 to-black/50" />
+
+      <div className="relative z-10 mx-auto flex min-h-[470px] max-w-7xl items-center px-10 sm:px-16">
         <button
           className="absolute left-4 grid h-10 w-10 place-items-center rounded-full bg-white text-3xl text-slate-500 shadow"
           onClick={() => change(-1)}>
+          <span className="-translate-y-[4px] inline-block">
           ‹
+          </span>
         </button>
+
         <div className="relative z-10 max-w-lg">
           <p className="text-xs font-bold tracking-widest text-[#79259c]">
             YOUR TRUSTED HEALTHCARE PARTNER
@@ -51,15 +66,16 @@ export default function Hero() {
             </a>
           </div>
         </div>
-        <div className="absolute right-[9%] hidden text-[150px] md:block">
-          🩺<span className="text-[#8e42aa]">✚</span>🌡️
-        </div>
+
         <button
           className="absolute right-4 grid h-10 w-10 place-items-center rounded-full bg-white text-3xl text-slate-500 shadow"
           onClick={() => change(1)}>
+       <span className="-translate-y-[4px] inline-block">
           ›
+          </span>
         </button>
-        <div className="absolute bottom-5 left-1/2 flex gap-2">
+
+        <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 gap-2">
           {slides.map((_, i) => (
             <button
               className={`h-2 w-2 rounded-full ${i === index ? "bg-[#79259c]" : "border border-[#b76dce]"}`}

@@ -33,7 +33,8 @@ export default function Home() {
       catalogService.getPromotions(),
       catalogService.getEvents(),
       catalogService.getBlogs(),
-    ])
+    ]
+  )
       .then(([categories, productResponse, promotions, events, blogs]) => {
         if (mounted) setData({ categories, products: productResponse.items, promotions, events, blogs });
       })
