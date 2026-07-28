@@ -56,20 +56,52 @@ export default function Home() {
 
     <section className="mx-auto max-w-7xl px-5 py-14 sm:px-8">
       {sectionTitle('EXPLORE WITH CONFIDENCE', 'Shop by Category', 'Everything you need for everyday care, in one trusted place.')}
-      <div className="mt-8 grid grid-cols-3 gap-3 md:grid-cols-6">
-        {data.categories.map(category => <CategoryCard key={category.id} category={category} />)}
+      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+        {data.categories.map(category => (
+          <CategoryCard key={category.id} category={category} />
+        ))}
       </div>
     </section>
 
-    <section className="mx-auto grid max-w-7xl gap-5 px-5 sm:px-8 md:grid-cols-3" aria-label="Current promotions">
-      {data.promotions.map(promotion => <PromotionCard key={promotion.id} promotion={promotion} />)}
+    <section
+      className="mx-auto grid max-w-7xl gap-4 px-5 sm:px-8 md:grid-cols-3"
+      aria-label="Current promotions"
+    >
+      {data.promotions.map((promotion) => (
+        <PromotionCard key={promotion.id} promotion={promotion} />
+      ))}
     </section>
 
-    <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8">
+    <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:px-8 md:py-16">
       {sectionTitle('QUALITY CARE, NEWLY SELECTED', activeTab, 'Health essentials chosen to support your every day.')}
-      <div className="mt-7 flex flex-wrap items-center gap-3 border-b border-slate-200 pb-3" role="tablist" aria-label="Product groups">
-        {['New Arrivals', 'Featured Products'].map(tab => <button key={tab} role="tab" aria-selected={activeTab === tab} className={`rounded px-3 py-2 text-sm font-bold ${activeTab===tab?'bg-[#79259c] text-white':'text-slate-600'}`} onClick={() => setActiveTab(tab)}>{tab}</button>)}
-        <a className="ml-auto text-sm font-bold text-[#79259c]" href="#/products">View All Products →</a>
+      <div
+        className="mt-7 flex flex-col gap-4 border-b border-slate-200 pb-4 sm:flex-row sm:flex-wrap sm:items-center"
+        role="tablist"
+        aria-label="Product groups"
+      >
+        <div className="flex gap-2">
+          {['New Arrivals', 'Featured Products'].map((tab) => (
+            <button
+              key={tab}
+              role="tab"
+              aria-selected={activeTab === tab}
+              className={`rounded-md px-4 py-2 text-sm font-bold transition ${activeTab === tab
+                  ? 'bg-[#79259c] text-white'
+                  : 'bg-slate-100 text-slate-600'
+                }`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        <a
+          className="text-sm font-bold text-[#79259c] sm:ml-auto"
+          href="#/products"
+        >
+          View All Products →
+        </a>
       </div>
       <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
         {displayedProducts.map(product => <ProductCard key={product.id} product={product} onQuickView={setQuickProduct} />)}

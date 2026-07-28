@@ -2,6 +2,7 @@
 import { useState } from "react";
 import bannerImage from "../../assets/images/banner.png";
 import Button from "../common/Button";
+
 const slides = [
   {
     title: (
@@ -11,7 +12,8 @@ const slides = [
         <em>Better Tomorrow.</em>
       </>
     ),
-    copy: "Discover our wide range of high-quality medical products designed for healthcare professionals and everyday medical needs.",
+    copy:
+      "Discover our wide range of high-quality medical products designed for healthcare professionals and everyday medical needs.",
   },
   {
     title: (
@@ -21,13 +23,19 @@ const slides = [
         <em>Our Priority.</em>
       </>
     ),
-    copy: "Trusted supplies, quick delivery, and dependable care at every stage of life.",
+    copy:
+      "Trusted supplies, quick delivery, and dependable care at every stage of life.",
   },
 ];
+
 export default function Hero() {
   const [index, setIndex] = useState(0);
+
   const slide = slides[index];
-  const change = (o) => setIndex((index + o + slides.length) % slides.length);
+
+  const change = (offset) =>
+    setIndex((index + offset + slides.length) % slides.length);
+
   return (
     <section className="relative min-h-[470px] overflow-hidden">
       {/* Full background image */}
@@ -53,16 +61,26 @@ export default function Hero() {
           <p className="text-xs font-bold tracking-widest text-[#79259c]">
             YOUR TRUSTED HEALTHCARE PARTNER
           </p>
-          <h1 className="mt-4 font-serif text-5xl leading-tight text-slate-900 sm:text-6xl">
+
+          <h1 className="mt-4 font-serif text-4xl leading-tight text-slate-900 sm:text-6xl">
             {slide.title}
           </h1>
-          <p className="mt-5 max-w-sm leading-7 text-slate-600">{slide.copy}</p>
-          <div className="mt-6 flex gap-3">
-            <a href="#/products">
-              <Button>Explore Products →</Button>
+
+          <p className="mx-auto mt-5 max-w-md leading-7 text-slate-600 sm:mx-0 sm:max-w-sm">
+            {slide.copy}
+          </p>
+
+          <div className="mt-8 flex flex-col gap-3 sm:mt-6 sm:flex-row">
+            <a href="#/products" className="w-full sm:w-auto">
+              <Button className="w-full sm:w-auto">
+                Explore Products →
+              </Button>
             </a>
-            <a href="#/about">
-              <Button variant="outline">Learn More</Button>
+
+            <a href="#/about" className="w-full sm:w-auto">
+              <Button variant="outline" className="w-full sm:w-auto">
+                Learn More
+              </Button>
             </a>
           </div>
         </div>
@@ -78,9 +96,13 @@ export default function Hero() {
         <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 gap-2">
           {slides.map((_, i) => (
             <button
-              className={`h-2 w-2 rounded-full ${i === index ? "bg-[#79259c]" : "border border-[#b76dce]"}`}
               key={i}
               onClick={() => setIndex(i)}
+              className={`h-2.5 w-2.5 rounded-full transition ${
+                i === index
+                  ? "bg-[#79259c]"
+                  : "border border-[#b76dce]"
+              }`}
             />
           ))}
         </div>
