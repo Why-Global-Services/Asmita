@@ -1,29 +1,3 @@
-// const benefits = [
-//   ["♢", "100% Genuine", "Trusted Quality"],
-//   ["✿", "Premium Care", "For Every Need"],
-//   ["▣", "Fast Delivery", "Across Angola"],
-//   ["♙", "Secure Payment", "Safe & Encrypted"],
-//   ["◔", "Customer Support", "We’re here to help!"],
-// ];
-// export default function TrustBar() {
-//   return (
-//     <section
-//       aria-label="Asmita service benefits"
-//       className="border-y border-[#f0e6f3] bg-white">
-//       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-5 px-5 py-6 sm:grid-cols-3 lg:grid-cols-5">
-//         {benefits.map(([icon, title, text]) => (
-//           <div key={title} className="flex items-center gap-3">
-//             <i className="text-3xl not-italic text-[#79259c]">{icon}</i>
-//             <p>
-//               <b className="block text-sm text-slate-900">{title}</b>
-//               <small className="text-xs text-slate-500">{text}</small>
-//             </p>
-//           </div>
-//         ))}
-//       </div>
-//     </section>
-//   );
-// }
 
 
 const benefits = [
