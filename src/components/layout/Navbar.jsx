@@ -77,9 +77,9 @@ export default function Navbar() {
                   className="block border-b border-slate-100 py-3 text-base font-semibold text-slate-800 transition hover:text-[#79259c] lg:border-0 lg:p-0 lg:text-sm lg:font-bold"
                 >
                   {name}
-                  {name === "Products" && (
+                  {/* {name === "Products" && (
                     <small className="ml-1">⌄</small>
-                  )}
+                  )} */}
                 </a>
               )
             )}

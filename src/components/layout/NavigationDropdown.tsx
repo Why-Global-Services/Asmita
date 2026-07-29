@@ -30,7 +30,7 @@ export default function NavigationDropdown({
         onClick={() => setIsOpen((current) => !current)}
         onMouseEnter={() => setIsOpen(true)}>
         {label}
-        <small className="ml-1">⌄</small>
+        {/* <small className="ml-1">⌄</small> */}
       </button>
       {isOpen && (
         <div className="lg:absolute lg:left-0 lg:top-full lg:z-50 lg:w-72 lg:rounded-md lg:border lg:border-slate-200 lg:bg-white lg:p-3 lg:shadow-lg">
