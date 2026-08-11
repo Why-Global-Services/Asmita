@@ -67,15 +67,13 @@ export default function Footer() {
 
             <nav className="mt-4 grid gap-3">
               {[
-                "Shipping Policy",
-                "Return & Refund Policy",
-                "Terms & Conditions",
-                "Privacy Policy",
-                "FAQ",
-              ].map((name) => (
+                ["Terms & Conditions", "/terms-and-conditions"],
+                ["Privacy Policy", "/contact"],
+                ["FAQ", "/contact"],
+              ].map(([name, path]) => (
                 <a
                   key={name}
-                  href="#/contact"
+                  href={`#${path}`}
                   className="text-sm text-white/75 transition hover:text-white"
                 >
                   {name}

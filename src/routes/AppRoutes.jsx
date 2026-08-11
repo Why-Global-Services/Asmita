@@ -10,6 +10,7 @@ import Events from '../pages/Events';
 import Blog from '../pages/Blog';
 import About from '../pages/About';
 import Contact from '../pages/Contact';
+import TermsConditions from '../pages/TermsConditions';
 import NotFound from '../pages/NotFound';
 
 function pageFor(rawPath){
@@ -17,7 +18,7 @@ function pageFor(rawPath){
   const query=Object.fromEntries(new URLSearchParams(queryString));
   const detail=path.match(/^\/products\/([^/]+)$/);
   if(detail)return <ProductDetails id={detail[1]}/>;
-  return ({'/':<Home/>,'/products':<Products key={rawPath} query={query}/>,'/promotions':<Promotions/>,'/promotion':<Promotions/>,'/new-arrivals':<NewArrivals/>,'/events':<Events/>,'/blog':<Blog/>,'/about':<About/>,'/contact':<Contact/>}[path]||<NotFound/>);
+  return ({'/':<Home/>,'/products':<Products key={rawPath} query={query}/>,'/promotions':<Promotions/>,'/promotion':<Promotions/>,'/new-arrivals':<NewArrivals/>,'/events':<Events/>,'/blog':<Blog/>,'/about':<About/>,'/contact':<Contact/>,'/terms-and-conditions':<TermsConditions/>}[path]||<NotFound/>);
 }
 
 export default function AppRoutes(){const current=()=>location.hash.replace(/^#/,'')||'/';const [path,setPath]=useState(current);useEffect(()=>{const sync=()=>setPath(current());addEventListener('hashchange',sync);return()=>removeEventListener('hashchange',sync)},[]);return <><Navbar/>{pageFor(path)}<a className="whatsapp" href="https://wa.me/244923456789" aria-label="WhatsApp">◔</a><Footer/></>}
