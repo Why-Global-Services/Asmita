@@ -58,6 +58,11 @@ const sections = [
 ];
 
 export default function TermsConditions() {
+  const scrollToSection = (event, id) => {
+    event.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <main className="bg-[#fbf9fc]">
       <section className="overflow-hidden bg-gradient-to-br from-[#351044] via-[#5d197b] to-[#8d36aa] text-white">
@@ -98,7 +103,8 @@ export default function TermsConditions() {
               {sections.map(({ id, title }, index) => (
                 <a
                   key={id}
-                  href={`#${id}`}
+                  href="#/terms-and-conditions"
+                  onClick={(event) => scrollToSection(event, id)}
                   className="shrink-0 rounded-full border border-[#eadced] bg-white px-3 py-2 text-sm text-slate-600 transition hover:border-[#b76dce] hover:text-[#79259c] lg:rounded-none lg:border-0 lg:border-l-2 lg:border-transparent lg:bg-transparent lg:px-4 lg:py-2 lg:hover:border-[#79259c]"
                 >
                   <span className="mr-2 text-xs font-bold text-[#a668be]">
@@ -108,7 +114,8 @@ export default function TermsConditions() {
                 </a>
               ))}
               <a
-                href="#contact-us"
+                href="#/terms-and-conditions"
+                onClick={(event) => scrollToSection(event, "contact-us")}
                 className="shrink-0 rounded-full border border-[#eadced] bg-white px-3 py-2 text-sm text-slate-600 transition hover:border-[#b76dce] hover:text-[#79259c] lg:rounded-none lg:border-0 lg:border-l-2 lg:border-transparent lg:bg-transparent lg:px-4 lg:py-2 lg:hover:border-[#79259c]"
               >
                 <span className="mr-2 text-xs font-bold text-[#a668be]">08</span>

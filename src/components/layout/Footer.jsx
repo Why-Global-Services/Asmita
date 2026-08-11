@@ -1,8 +1,6 @@
 
 
 
-import Newsletter from "./Newsletter";
-
 const links = [
   ["Home", "/"],
   ["About Us", "/about"],
@@ -16,10 +14,7 @@ const links = [
 
 export default function Footer() {
   return (
-    <>
-      <Newsletter />
-
-      <footer className="bg-gradient-to-br from-[#24102f] to-[#4d155f] text-white">
+    <footer className="bg-gradient-to-br from-[#24102f] to-[#4d155f] text-white">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 text-center sm:grid-cols-2 sm:px-8 sm:text-left lg:grid-cols-4">
           {/* Company */}
           <div>
@@ -102,7 +97,6 @@ export default function Footer() {
             <p>Designed with ♥ by Asmita Angola</p>
           </div>
         </div>
-      </footer>
-    </>
+    </footer>
   );
 }
