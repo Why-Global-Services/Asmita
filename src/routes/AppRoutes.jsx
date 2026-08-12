@@ -46,6 +46,10 @@ export default function AppRoutes() {
     return () => removeEventListener("hashchange", sync);
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [path]);
+
   return (
     <>
       <Navbar />
