@@ -41,16 +41,13 @@ export default function Products({ query = {} }) {
           product.name.toLowerCase().includes(search.toLowerCase())) &&
         (!filters.category ||
           product.category === filters.category ||
+          product.categoryTitle === filters.category ||
           product.category.toLowerCase().replaceAll(" ", "-") ===
             filters.category) &&
         (!filters.subcategory ||
-          product.subcategory === filters.subcategory) &&
-        (!filters.inStock || product.inStock) &&
-        (!filters.price ||
-          (filters.price === "under500"
-            ? product.price < 500
-            : product.price >= 500)) &&
-        (!filters.rating || product.rating >= filters.rating)
+          product.subcategory === filters.subcategory ||
+          product.subCategoryName === filters.subcategory ||
+          product.subCategoryTitle === filters.subcategory)
     );
 
     return sort.includes("Low")

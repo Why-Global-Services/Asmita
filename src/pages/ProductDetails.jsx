@@ -8,6 +8,7 @@ import { useEnquiry } from "../hooks/useEnquiry";
 
 export default function ProductDetails({ id }) {
   const [product, setProduct] = useState();
+  const [activeImgIndex, setActiveImgIndex] = useState(0);
   const { openEnquiry } = useEnquiry();
 
   useEffect(() => {
@@ -16,6 +17,8 @@ export default function ProductDetails({ id }) {
 
   if (!product) return <Loader />;
 
+  const images = product.productImages && product.productImages.length > 0 ? product.productImages : [];
+
   return (
     <>
       <PageHero title={product.name} />
@@ -23,20 +26,37 @@ export default function ProductDetails({ id }) {
       <main className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 md:gap-10 md:px-8 md:py-12">
         {/* Product Images */}
         <div>
-          <div className="grid h-[280px] place-items-center rounded-2xl bg-[#faf2fc] text-7xl sm:h-[360px] sm:text-9xl">
-            {product.emoji}
+          <div className="grid h-[280px] place-items-center overflow-hidden rounded-2xl bg-[#faf2fc] text-7xl sm:h-[360px] sm:text-9xl">
+            {images.length > 0 ? (
+              <img
+                src={images[activeImgIndex] || images[0]}
+                alt={product.name}
+                className="h-full w-full object-contain p-4"
+              />
+            ) : (
+              product.emoji
+            )}
           </div>
 
-          <div className="mt-4 flex gap-3">
-            <button className="grid h-14 w-14 place-items-center rounded-lg border border-[#79259c] bg-[#faf2fc] text-2xl sm:h-16 sm:w-16 sm:text-3xl">
-              {product.emoji}
-            </button>
-
-            <button className="grid h-14 w-14 place-items-center rounded-lg border border-slate-200 bg-slate-50 text-2xl sm:h-16 sm:w-16 sm:text-3xl">
-              {product.emoji}
-            </button>
-          </div>
+          {images.length > 1 && (
+            <div className="mt-4 flex gap-3">
+              {images.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveImgIndex(idx)}
+                  className={`grid h-14 w-14 place-items-center overflow-hidden rounded-lg border p-1 text-2xl sm:h-16 sm:w-16 ${
+                    activeImgIndex === idx
+                      ? "border-[#79259c] bg-[#faf2fc]"
+                      : "border-slate-200 bg-slate-50"
+                  }`}
+                >
+                  <img src={img} alt="" className="h-full w-full object-contain" />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
+
 
         {/* Product Details */}
         <section>

@@ -5,13 +5,39 @@ export default function FilterSidebar({
   filters = {},
   onChange,
 }) {
-  const set = (key, value) => onChange?.({ ...filters, [key]: value });
+  const set = (key, value) => {
+    if (filters[key] === value) {
+      const next = { ...filters };
+      delete next[key];
+      onChange?.(next);
+    } else {
+      onChange?.({ ...filters, [key]: value });
+    }
+  };
 
   const label =
     "flex cursor-pointer items-center gap-3 rounded-md py-2 text-sm text-slate-600 transition hover:bg-[#faf4fc]";
 
+  const activeCategories = filters.category
+    ? categories.filter(
+        (c) => c.name === filters.category || c.id === filters.category
+      )
+    : categories;
+
+  const rawSubcats = activeCategories.flatMap(
+    (category) => category.subcategories || []
+  );
+
   const subcategories = [
-    ...new Set(categories.flatMap((category) => category.subcategories || [])),
+    ...new Set(
+      rawSubcats
+        .map((s) =>
+          typeof s === "string"
+            ? s
+            : s?.subCategoryTitle || s?.name || s?.title
+        )
+        .filter(Boolean)
+    ),
   ];
 
   return (
@@ -26,7 +52,7 @@ export default function FilterSidebar({
 
         <div className="mt-2 grid gap-1">
           {categories.map((category) => (
-            <label className={label} key={category.id}>
+            <label className={label} key={category.id || category._id}>
               <input
                 className="accent-[#79259c]"
                 type="radio"
@@ -43,87 +69,35 @@ export default function FilterSidebar({
         </div>
 
         {/* Sub Category */}
-        <b className="mt-5 block text-sm text-slate-900">Sub-category</b>
+        {subcategories.length > 0 && (
+          <>
+            <b className="mt-5 block text-sm text-slate-900">Sub-category</b>
 
-        <div className="mt-2 grid gap-1">
-          {subcategories.map((subcategory) => (
-            <label className={label} key={subcategory}>
-              <input
-                className="accent-[#79259c]"
-                type="radio"
-                name="subcategory"
-                checked={filters.subcategory === subcategory}
-                onChange={() => set("subcategory", subcategory)}
-              />
-              {subcategory}
-            </label>
-          ))}
-        </div>
+            <div className="mt-2 grid gap-1">
+              {subcategories.map((subcategory) => (
+                <label className={label} key={subcategory}>
+                  <input
+                    className="accent-[#79259c]"
+                    type="radio"
+                    name="subcategory"
+                    checked={filters.subcategory === subcategory}
+                    onChange={() => set("subcategory", subcategory)}
+                  />
+                  {subcategory}
+                </label>
+              ))}
+            </div>
+          </>
+        )}
 
-        {/* Price */}
-        <b className="mt-5 block text-sm text-slate-900">Price Range</b>
-
-        <div className="mt-2 grid gap-1">
-          <label className={label}>
-            <input
-              className="accent-[#79259c]"
-              type="radio"
-              name="price"
-              checked={filters.price === "under500"}
-              onChange={() => set("price", "under500")}
-            />
-            Under ₹500
-          </label>
-
-          <label className={label}>
-            <input
-              className="accent-[#79259c]"
-              type="radio"
-              name="price"
-              checked={filters.price === "over500"}
-              onChange={() => set("price", "over500")}
-            />
-            ₹500 and above
-          </label>
-        </div>
-
-        {/* Availability */}
-        <b className="mt-5 block text-sm text-slate-900">Availability</b>
-
-        <div className="mt-2">
-          <label className={label}>
-            <input
-              className="accent-[#79259c]"
-              type="checkbox"
-              checked={filters.inStock || false}
-              onChange={(e) => set("inStock", e.target.checked)}
-            />
-            In Stock
-          </label>
-        </div>
-
-        {/* Rating */}
-        <b className="mt-5 block text-sm text-slate-900">Rating</b>
-
-        <div className="mt-2">
-          <label className={label}>
-            <input
-              className="accent-[#79259c]"
-              type="radio"
-              name="rating"
-              checked={filters.rating === 4}
-              onChange={() => set("rating", 4)}
-            />
-            ★★★★ & above
-          </label>
-        </div>
-
-        <button
-          className="mt-6 w-full rounded-md border border-[#79259c] py-2.5 text-sm font-bold text-[#79259c] transition hover:bg-[#faf4fc]"
-          onClick={() => onChange?.({})}
-        >
-          ↻ Reset Filters
-        </button>
+        {(filters.category || filters.subcategory) && (
+          <button
+            className="mt-6 w-full rounded-md border border-[#79259c] py-2.5 text-sm font-bold text-[#79259c] transition hover:bg-[#faf4fc]"
+            onClick={() => onChange?.({})}
+          >
+            ↻ Reset Filters
+          </button>
+        )}
       </div>
     </aside>
   );

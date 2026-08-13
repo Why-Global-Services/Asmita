@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
+import { catalogService } from "../../services/catalogService";
 
 const initialForm = {
   fullName: "",
@@ -13,6 +14,8 @@ const initialForm = {
 
 export default function EnquiryModal({ product, onClose }) {
   const [form, setForm] = useState(initialForm);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const adminNumber = import.meta.env.VITE_WHATSAPP_ADMIN_NUMBER;
 
@@ -27,12 +30,29 @@ export default function EnquiryModal({ product, onClose }) {
     }));
   };
 
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault();
+    setLoading(true);
+    setErrorMsg("");
 
-    if (!adminNumber) return;
+    const bookingPayload = {
+      name: form.fullName,
+      phoneNumber: form.mobile,
+      email: form.email,
+      categoryId: product.categoryId || product._id || product.id || "cat_default",
+      categoryTitle: product.categoryTitle || product.category || "General",
+      subCategoryId: product.subCategoryId || product._id || product.id || "subcat_default",
+      subCategoryTitle: product.subCategoryTitle || product.subcategory || "General",
+      productId: product._id || product.id || "prod_default",
+      productTitle: product.name || product.productTitle || "Product",
+      message: form.message || "",
+    };
 
-    const message = `Hello,
+    try {
+      await catalogService.bookProduct(bookingPayload);
+
+      if (adminNumber) {
+        const message = `Hello,
 
 New Product Enquiry
 
@@ -63,13 +83,20 @@ ${form.message}
 Product Link:
 ${productUrl}`;
 
-    window.open(
-      `https://wa.me/${adminNumber}?text=${encodeURIComponent(message)}`,
-      "_blank",
-      "noopener,noreferrer"
-    );
+        window.open(
+          `https://wa.me/${adminNumber}?text=${encodeURIComponent(message)}`,
+          "_blank",
+          "noopener,noreferrer"
+        );
+      }
 
-    onClose();
+      setForm(initialForm);
+      onClose();
+    } catch (err) {
+      setErrorMsg(err.message || "Failed to submit enquiry. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -84,7 +111,7 @@ ${productUrl}`;
         </h2>
 
         <p className="mt-2 text-sm leading-6 text-slate-600">
-          Share your details and we'll continue the conversation on WhatsApp.
+          Share your details and we'll process your enquiry immediately.
         </p>
       </div>
 
@@ -148,29 +175,26 @@ ${productUrl}`;
           />
         </label>
 
-        {!adminNumber && (
-          <p className="text-sm text-red-600 sm:col-span-2">
-            WhatsApp is not configured yet. Add
-            {" "}
-            <strong>VITE_WHATSAPP_ADMIN_NUMBER</strong>
-            {" "}
-            to your environment.
+        {errorMsg && (
+          <p className="text-sm text-red-600 sm:col-span-2 font-semibold">
+            {errorMsg}
           </p>
         )}
 
         <div className="sm:col-span-2">
           <Button
             type="submit"
-            disabled={!adminNumber}
+            disabled={loading}
             className="w-full sm:w-auto"
           >
-            Submit Enquiry
+            {loading ? "Submitting..." : "Submit Enquiry"}
           </Button>
         </div>
       </form>
     </Modal>
   );
 }
+
 
 function Field({ label, ...inputProps }) {
   return (

@@ -15,9 +15,18 @@ export default function QuickView({ product, onClose }) {
       {product && (
         <div className="grid max-h-[80vh] gap-6 overflow-y-auto md:grid-cols-2 md:items-center md:gap-8">
           {/* Product Image */}
-          <div className="grid h-56 place-items-center rounded-xl bg-[#faf2fc] p-6 text-7xl sm:h-64 sm:text-8xl md:h-72 md:text-9xl">
-            {product.emoji}
+          <div className="grid h-56 place-items-center overflow-hidden rounded-xl bg-[#faf2fc] p-6 text-7xl sm:h-64 sm:text-8xl md:h-72 md:text-9xl">
+            {product.productImages && product.productImages[0] ? (
+              <img
+                src={product.productImages[0]}
+                alt={product.name}
+                className="h-full w-full object-contain"
+              />
+            ) : (
+              product.emoji
+            )}
           </div>
+
 
           {/* Product Details */}
           <section className="text-center md:text-left">

@@ -1,9 +1,37 @@
 import { useState } from "react";
 import PageHero from "../components/layout/PageHero";
 import Button from "../components/common/Button";
+import { catalogService } from "../services/catalogService";
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phoneNumber: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMsg("");
+    try {
+      await catalogService.createContact(formData);
+      setSent(true);
+    } catch (err) {
+      setErrorMsg(err.message || "Failed to send message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -39,18 +67,21 @@ export default function Contact() {
         {/* Contact Form */}
         <form
           className="grid gap-4 rounded-xl border border-slate-200 p-5 shadow-sm sm:p-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setSent(true);
-          }}
+          onSubmit={handleSubmit}
         >
           <input
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
             className="w-full rounded-lg border border-slate-200 p-3 outline-none focus:border-[#79259c]"
             required
             placeholder="Your name"
           />
 
           <input
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             className="w-full rounded-lg border border-slate-200 p-3 outline-none focus:border-[#79259c]"
             required
             type="email"
@@ -58,27 +89,37 @@ export default function Contact() {
           />
 
           <input
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleChange}
             className="w-full rounded-lg border border-slate-200 p-3 outline-none focus:border-[#79259c]"
             placeholder="Phone number"
           />
 
           <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
             className="min-h-28 rounded-lg border border-slate-200 p-3 outline-none focus:border-[#79259c] sm:min-h-32"
             required
             placeholder="How can we help?"
           />
+
+          {errorMsg && (
+            <p className="text-sm text-red-600 font-semibold">{errorMsg}</p>
+          )}
 
           {sent ? (
             <b className="rounded-lg bg-[#f7eafb] p-3 text-center text-[#79259c]">
               Thank you — we will be in touch shortly.
             </b>
           ) : (
-            <Button className="w-full sm:w-auto" type="submit">
-              Send Message
+            <Button className="w-full sm:w-auto" type="submit" disabled={loading}>
+              {loading ? "Sending..." : "Send Message"}
             </Button>
           )}
         </form>
       </main>
     </>
   );
-}
+}
