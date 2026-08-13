@@ -170,6 +170,19 @@ export const catalogService = {
     return list;
   },
 
+  getBlog: async (idOrSlug) => {
+    if (!idOrSlug) return null;
+    let apiData = await fetchApi(`/getBlogById/${idOrSlug}`);
+    if (!apiData) {
+      apiData = await fetchApi(`/getBlogBySlug/${idOrSlug}`);
+    }
+    let rawBlog = null;
+    if (apiData && typeof apiData === 'object') {
+      rawBlog = apiData.data || apiData.mainBlog || apiData;
+    }
+    return rawBlog && (rawBlog._id || rawBlog.title || rawBlog.slug) ? normalizeBlog(rawBlog) : null;
+  },
+
   createContact: async (contactData) => {
     return await request('/createContact', {
       method: 'POST',

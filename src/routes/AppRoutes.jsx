@@ -8,6 +8,7 @@ import Promotions from "../pages/Promotions";
 import NewArrivals from "../pages/NewArrivals";
 import Events from "../pages/Events";
 import Blog from "../pages/Blog";
+import BlogDetails from "../pages/BlogDetails";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
 import TermsConditions from "../pages/TermsConditions";
@@ -19,6 +20,9 @@ function pageFor(rawPath) {
   const detail = path.match(/^\/products\/([^/]+)$/);
 
   if (detail) return <ProductDetails id={detail[1]} />;
+
+  const blogDetail = path.match(/^\/blog\/([^/]+)$/);
+  if (blogDetail) return <BlogDetails key={rawPath} id={blogDetail[1]} />;
 
   return (
     {
