@@ -2,14 +2,22 @@ const ApiError = require("./apiError");
 const httpStatus = require("http-status");
 const dotenv = require("dotenv");
 dotenv.config();
-const AWS = require("aws-sdk");
+const {
+  S3Client,
+  ListObjectsV2Command,
+  DeleteObjectsCommand,
+  DeleteObjectCommand,
+} = require("@aws-sdk/client-s3");
+const { Upload } = require("@aws-sdk/lib-storage");
 
-const s3 = new AWS.S3({
+const s3Client = new S3Client({
   endpoint: process.env.AWS_ENDPOINT,
-  credentials: new AWS.Credentials(
-    String(process.env.AWS_ACCESS_KEY_ID),
-    String(process.env.AWS_SECRET_ACCESS_KEY)
-  ),
+  region: process.env.AWS_REGION || "us-east-1",
+  credentials: {
+    accessKeyId: String(process.env.AWS_ACCESS_KEY_ID || ""),
+    secretAccessKey: String(process.env.AWS_SECRET_ACCESS_KEY || ""),
+  },
+  forcePathStyle: false,
 });
 
 const uploadToCloud = async (file, keyPrefix = "products") => {
@@ -29,11 +37,22 @@ const uploadToCloud = async (file, keyPrefix = "products") => {
 
     console.log("🚀 Uploading to DigitalOcean:", key);
 
-    const uploadedData = await s3.upload(params).promise();
+    const parallelUploads3 = new Upload({
+      client: s3Client,
+      params,
+    });
 
-    const fileUrl = uploadedData.Location.startsWith("https://")
-      ? uploadedData.Location
-      : `https://${uploadedData.Location}`;
+    const uploadedData = await parallelUploads3.done();
+
+    let fileUrl = uploadedData.Location;
+    if (!fileUrl) {
+      const endpoint = process.env.AWS_ENDPOINT
+        ? process.env.AWS_ENDPOINT.replace(/^https?:\/\//, "")
+        : "";
+      fileUrl = `https://${params.Bucket}.${endpoint}/${key}`;
+    } else if (!fileUrl.startsWith("https://") && !fileUrl.startsWith("http://")) {
+      fileUrl = `https://${fileUrl}`;
+    }
 
     console.log("✅ Uploaded successfully:", fileUrl);
     return fileUrl;
@@ -47,33 +66,34 @@ const uploadToCloud = async (file, keyPrefix = "products") => {
 };
 
 const deleteFolderFromS3 = async (folderName, bucketName = "facesync") => {
-  const params = {
-    Bucket: bucketName,
-    Prefix: folderName,
-  };
+  let isTruncated = true;
+  let continuationToken = undefined;
 
-  const listAllObjects = async (params) => {
-    let data;
-    do {
-      data = await s3.listObjectsV2(params).promise();
-      if (data.Contents.length === 0) break;
+  while (isTruncated) {
+    const listParams = {
+      Bucket: bucketName,
+      Prefix: folderName,
+      ContinuationToken: continuationToken,
+    };
 
-      const deleteParams = {
-        Bucket: bucketName,
-        Delete: { Objects: [] },
-      };
+    const data = await s3Client.send(new ListObjectsV2Command(listParams));
 
-      data.Contents.forEach(({ Key }) => {
-        deleteParams.Delete.Objects.push({ Key });
-      });
+    if (!data.Contents || data.Contents.length === 0) {
+      break;
+    }
 
-      await s3.deleteObjects(deleteParams).promise();
+    const deleteParams = {
+      Bucket: bucketName,
+      Delete: {
+        Objects: data.Contents.map(({ Key }) => ({ Key })),
+      },
+    };
 
-      params.ContinuationToken = data.NextContinuationToken;
-    } while (data.IsTruncated);
-  };
+    await s3Client.send(new DeleteObjectsCommand(deleteParams));
 
-  await listAllObjects(params);
+    isTruncated = Boolean(data.IsTruncated);
+    continuationToken = data.NextContinuationToken;
+  }
 };
 
 const deleteFileFromS3 = async (fileUrl, bucketName = "facesync") => {
@@ -82,29 +102,34 @@ const deleteFileFromS3 = async (fileUrl, bucketName = "facesync") => {
     Key: fileUrl,
   };
 
-  await s3.deleteObject(params).promise();
+  await s3Client.send(new DeleteObjectCommand(params));
 };
 
 const calculateFolderSize = async (folderName) => {
   let totalSize = 0;
   const bucketName = "facesync";
-  const params = {
-    Bucket: bucketName,
-    Prefix: folderName,
-  };
+  let isTruncated = true;
+  let continuationToken = undefined;
 
-  const listAllObjects = async (params) => {
-    let data;
-    do {
-      data = await s3.listObjectsV2(params).promise();
+  while (isTruncated) {
+    const params = {
+      Bucket: bucketName,
+      Prefix: folderName,
+      ContinuationToken: continuationToken,
+    };
+
+    const data = await s3Client.send(new ListObjectsV2Command(params));
+
+    if (data.Contents && data.Contents.length > 0) {
       data.Contents.forEach((obj) => {
-        totalSize += obj.Size;
+        totalSize += obj.Size || 0;
       });
-      params.ContinuationToken = data.NextContinuationToken;
-    } while (data.IsTruncated);
-  };
+    }
 
-  await listAllObjects(params);
+    isTruncated = Boolean(data.IsTruncated);
+    continuationToken = data.NextContinuationToken;
+  }
+
   return totalSize;
 };
 
@@ -125,7 +150,8 @@ const convertSize = (sizeInBytes) => {
 };
 
 module.exports = {
-  s3,
+  s3: s3Client,
+  s3Client,
   uploadToCloud,
   calculateFolderSize,
   convertSize,

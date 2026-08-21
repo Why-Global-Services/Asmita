@@ -10,6 +10,15 @@ dns.setDefaultResultOrder("ipv4first");
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    logger.error(`Port ${config.PORT} is already in use. Please terminate the process using this port or change PORT in .env`);
+  } else {
+    logger.error(`Server error: ${error.message}`);
+  }
+  process.exit(1);
+});
+
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
     logger.info("Connected to MongoDB");
     server.listen(config.PORT, () => {
@@ -42,6 +51,17 @@ process.on("unhandledRejection", unexpectedErrorHandler);
 process.on("SIGTERM", () => {
   logger.info("SIGTERM received");
   if (server) {
-    server.close();
+    server.close(() => {
+      process.exit(0);
+    });
+  }
+});
+
+process.on("SIGINT", () => {
+  logger.info("SIGINT received");
+  if (server) {
+    server.close(() => {
+      process.exit(0);
+    });
   }
 });
