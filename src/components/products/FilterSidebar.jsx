@@ -1,12 +1,14 @@
 
 
+import { isSameCategory } from "../../utils/categoryNavigation";
+
 export default function FilterSidebar({
   categories = [],
   filters = {},
   onChange,
 }) {
   const set = (key, value) => {
-    if (filters[key] === value) {
+    if (filters[key] === value || (key === "category" && isSameCategory(filters.category, value))) {
       const next = { ...filters };
       delete next[key];
       onChange?.(next);
@@ -19,9 +21,7 @@ export default function FilterSidebar({
     "flex cursor-pointer items-center gap-3 rounded-md py-2 text-sm text-slate-600 transition hover:bg-[#faf4fc]";
 
   const activeCategories = filters.category
-    ? categories.filter(
-        (c) => c.name === filters.category || c.id === filters.category
-      )
+    ? categories.filter((c) => isSameCategory(c, filters.category))
     : categories;
 
   const rawSubcats = activeCategories.flatMap(
@@ -51,21 +51,22 @@ export default function FilterSidebar({
         <b className="text-sm text-slate-900">Category</b>
 
         <div className="mt-2 grid gap-1">
-          {categories.map((category) => (
-            <label className={label} key={category.id || category._id}>
-              <input
-                className="accent-[#79259c]"
-                type="radio"
-                name="category"
-                checked={
-                  filters.category === category.name ||
-                  filters.category === category.id
-                }
-                onChange={() => set("category", category.name)}
-              />
-              {category.name}
-            </label>
-          ))}
+          {categories.map((category) => {
+            const catLabel = category.name || category.categoryTitle;
+            const isChecked = isSameCategory(filters.category, category);
+            return (
+              <label className={label} key={category.id || category._id || catLabel}>
+                <input
+                  className="accent-[#79259c]"
+                  type="radio"
+                  name="category"
+                  checked={isChecked}
+                  onChange={() => set("category", catLabel)}
+                />
+                {catLabel}
+              </label>
+            );
+          })}
         </div>
 
         {/* Sub Category */}

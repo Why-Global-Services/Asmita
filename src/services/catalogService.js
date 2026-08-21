@@ -1,4 +1,8 @@
 import { request } from './http';
+import {
+  productMatchesCategory,
+  productMatchesSubcategory,
+} from '../utils/categoryNavigation';
 
 const slug = (value) => (value ? String(value).toLowerCase().replaceAll(' ', '-') : '');
 
@@ -105,8 +109,8 @@ export const catalogService = {
     let apiData = await fetchApi('/getAllActiveProducts', { params });
     let list = Array.isArray(apiData) ? apiData.map(normalizeProduct) : [];
     if (params?.search) list = list.filter((product) => product.name.toLowerCase().includes(params.search.toLowerCase()));
-    if (params?.category) list = list.filter((product) => product.category === params.category || slug(product.category) === params.category);
-    if (params?.subcategory) list = list.filter((product) => product.subcategory === params.subcategory);
+    if (params?.category) list = list.filter((product) => productMatchesCategory(product, params.category));
+    if (params?.subcategory) list = list.filter((product) => productMatchesSubcategory(product, params.subcategory));
     return { items: list, total: list.length };
   },
 

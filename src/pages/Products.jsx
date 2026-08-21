@@ -8,6 +8,14 @@ import Loader from "../components/common/Loader";
 import EmptyState from "../components/common/EmptyState";
 import QuickView from "../components/products/QuickView";
 import { catalogService } from "../services/catalogService";
+import {
+  categoryProductSectionId,
+  getCategoryHeading,
+  getCategoryRoute,
+  productMatchesCategory,
+  productMatchesSubcategory,
+  scrollToCategorySection,
+} from "../utils/categoryNavigation";
 
 export default function Products({ query = {} }) {
   const [data, setData] = useState(null);
@@ -19,6 +27,26 @@ export default function Products({ query = {} }) {
   const [sort, setSort] = useState("Popularity");
   const [quick, setQuick] = useState(null);
   const [page, setPage] = useState(1);
+
+  // Synchronize state when query prop changes (e.g. from Navbar dropdown or external navigation)
+  useEffect(() => {
+    setFilters({
+      category: query.category || "",
+      subcategory: query.subcategory || "",
+    });
+    setSearch(query.search || "");
+    setPage(1);
+  }, [query.category, query.subcategory, query.search]);
+
+  const updateCategoryRoute = (nextFilters) => {
+    const nextPath = getCategoryRoute(
+      nextFilters.category,
+      nextFilters.subcategory
+    );
+    if (location.hash.replace(/^#/, "") !== nextPath) {
+      location.hash = nextPath;
+    }
+  };
 
   useEffect(() => {
     Promise.all([
@@ -40,14 +68,9 @@ export default function Products({ query = {} }) {
         (!search ||
           product.name.toLowerCase().includes(search.toLowerCase())) &&
         (!filters.category ||
-          product.category === filters.category ||
-          product.categoryTitle === filters.category ||
-          product.category.toLowerCase().replaceAll(" ", "-") ===
-            filters.category) &&
+          productMatchesCategory(product, filters.category)) &&
         (!filters.subcategory ||
-          product.subcategory === filters.subcategory ||
-          product.subCategoryName === filters.subcategory ||
-          product.subCategoryTitle === filters.subcategory)
+          productMatchesSubcategory(product, filters.subcategory))
     );
 
     return sort.includes("Low")
@@ -55,9 +78,19 @@ export default function Products({ query = {} }) {
       : sort.includes("High")
       ? a.sort((x, y) => y.price - x.price)
       : a;
-  }, [data, filters, search, sort]);
+  }, [data, filters.category, filters.subcategory, search, sort]);
+
+  useEffect(() => {
+    if (!data || !filters.category) return;
+    const rafId = requestAnimationFrame(() => {
+      scrollToCategorySection(filters.category, "smooth");
+    });
+    return () => cancelAnimationFrame(rafId);
+  }, [data, filters.category, filters.subcategory]);
 
   if (!data) return <Loader />;
+
+  const categoryHeading = getCategoryHeading(filters.category, data.categories);
 
   return (
     <>
@@ -70,12 +103,17 @@ export default function Products({ query = {} }) {
           onChange={(next) => {
             setFilters(next);
             setPage(1);
+            updateCategoryRoute(next);
           }}
         />
 
-        <section>
+        <section
+          id={categoryProductSectionId(filters.category)}
+          data-category-product-section
+          className="scroll-mt-24 sm:scroll-mt-28 lg:scroll-mt-32"
+        >
           <h2 className="text-xl font-bold text-[#54206f]">
-            Healthcare Products
+            {categoryHeading}
           </h2>
 
           <div className="my-5 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">

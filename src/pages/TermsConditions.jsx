@@ -94,12 +94,12 @@ export default function TermsConditions() {
       </section>
 
       <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14 lg:py-16">
-        <div className="grid gap-8 lg:grid-cols-[230px_minmax(0,1fr)] lg:gap-16">
-          <aside className="lg:sticky lg:top-28 lg:h-fit">
+        <div className="grid min-w-0 gap-8 lg:grid-cols-[230px_minmax(0,1fr)] lg:gap-16">
+          <aside className="min-w-0 lg:sticky lg:top-28 lg:h-fit">
             <p className="text-xs font-bold tracking-[0.16em] text-[#79259c]">
               ON THIS PAGE
             </p>
-            <nav className="mt-4 flex gap-2 overflow-x-auto pb-2 lg:grid lg:gap-1 lg:overflow-visible lg:border-l lg:border-[#e9d9ee] lg:pb-0">
+            <nav className="mt-4 flex max-w-full gap-2 overflow-x-auto pb-2 lg:grid lg:gap-1 lg:overflow-visible lg:border-l lg:border-[#e9d9ee] lg:pb-0">
               {sections.map(({ id, title }, index) => (
                 <a
                   key={id}

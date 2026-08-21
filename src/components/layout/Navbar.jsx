@@ -62,10 +62,9 @@ export default function Navbar() {
             } lg:static lg:ml-auto lg:flex lg:items-center lg:gap-3 lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none lg:overflow-visible xl:gap-6`}
           >
             {links.map(([name, path]) =>
-              ["Promotion", "New Arrivals"].includes(name) ? (
+              name === "Products" ? (
                 <NavigationDropdown
                   key={name}
-                  label={name}
                   categories={categories}
                   onNavigate={close}
                 />

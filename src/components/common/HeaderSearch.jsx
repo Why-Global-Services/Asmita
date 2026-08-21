@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { catalogService } from "../../services/catalogService";
+import { getCategoryRoute } from "../../utils/categoryNavigation";
 import SearchBar from "./SearchBar";
 
 const matches = (value, query) =>
@@ -27,7 +28,7 @@ export default function HeaderSearch({ categories, onNavigate }) {
         key: `category-${category.id}`,
         label: category.name,
         meta: "Category",
-        href: `#/products?category=${encodeURIComponent(category.name)}`,
+        href: `#${getCategoryRoute(category)}`,
       }));
 
     const subcategoryMatches = categories.flatMap((category) =>
@@ -37,9 +38,7 @@ export default function HeaderSearch({ categories, onNavigate }) {
           key: `subcategory-${category.id}-${subcategory}`,
           label: subcategory,
           meta: category.name,
-          href: `#/products?category=${encodeURIComponent(
-            category.name
-          )}&subcategory=${encodeURIComponent(subcategory)}`,
+          href: `#${getCategoryRoute(category, subcategory)}`,
         }))
     );
 
