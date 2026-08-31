@@ -23,42 +23,41 @@ export default function HeaderSearch({ categories, onNavigate }) {
     if (!term) return [];
 
     const categoryMatches = categories
-      .filter((category) => matches(category.name, term))
+      .filter((category) => matches(category.name || category.categoryTitle || "", term))
       .map((category) => ({
-        key: `category-${category.id}`,
-        label: category.name,
+        key: `category-${category.id || category._id}`,
+        label: category.name || category.categoryTitle,
         meta: "Category",
         href: `#${getCategoryRoute(category)}`,
       }));
 
-    // Subcategory matches temporarily disabled
-    /*
     const subcategoryMatches = categories.flatMap((category) =>
       (category.subcategories || [])
-        .filter((subcategory) => matches(subcategory, term))
-        .map((subcategory) => ({
-          key: `subcategory-${category.id}-${subcategory}`,
-          label: subcategory,
-          meta: category.name,
-          href: `#${getCategoryRoute(category, subcategory)}`,
+        .map((sub) => (typeof sub === "string" ? sub : sub?.name || sub?.subCategoryTitle))
+        .filter(Boolean)
+        .filter((subTitle) => matches(subTitle, term))
+        .map((subTitle) => ({
+          key: `subcategory-${category.id || category._id}-${subTitle}`,
+          label: subTitle,
+          meta: `${category.name || category.categoryTitle} • Subcategory`,
+          href: `#${getCategoryRoute(category, subTitle)}`,
         }))
     );
-    */
 
     const productMatches = products
-      .filter((product) => matches(product.name, term))
+      .filter((product) => matches(product.name || product.productTitle || "", term))
       .map((product) => ({
-        key: `product-${product.id}`,
-        label: product.name,
-        meta: product.category,
-        href: `#/products?search=${encodeURIComponent(product.name)}`,
+        key: `product-${product.id || product._id}`,
+        label: product.name || product.productTitle,
+        meta: product.category || "Product",
+        href: `#/products/${product.id || product._id}`,
       }));
 
     return [
       ...productMatches,
       ...categoryMatches,
-      // ...subcategoryMatches, // Subcategory search temporarily disabled
-    ].slice(0, 7);
+      ...subcategoryMatches,
+    ].slice(0, 8);
   }, [categories, products, query]);
 
   const close = () => {

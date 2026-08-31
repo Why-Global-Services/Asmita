@@ -19,15 +19,15 @@ function pageFor(rawPath) {
   const query = Object.fromEntries(new URLSearchParams(queryString));
   const detail = path.match(/^\/products\/([^/]+)$/);
 
-  if (detail) return <ProductDetails id={detail[1]} />;
+  if (detail) return <ProductDetails key={detail[1]} id={detail[1]} />;
 
   const blogDetail = path.match(/^\/blog\/([^/]+)$/);
-  if (blogDetail) return <BlogDetails key={rawPath} id={blogDetail[1]} />;
+  if (blogDetail) return <BlogDetails key={blogDetail[1]} id={blogDetail[1]} />;
 
   return (
     {
       "/": <Home />,
-      "/products": <Products key={path} query={query} />,
+      "/products": <Products key="products-page" query={query} />,
       "/promotions": <Promotions />,
       "/promotion": <Promotions />,
       "/new-arrivals": <NewArrivals />,
@@ -43,36 +43,21 @@ function pageFor(rawPath) {
 export default function AppRoutes() {
   const current = () => location.hash.replace(/^#/, "") || "/";
   const [path, setPath] = useState(current);
-  const shouldScrollToTop = useRef(false);
 
   useEffect(() => {
-    let isHistoryNavigation = false;
-    const markHistoryNavigation = () => {
-      isHistoryNavigation = true;
-    };
     const sync = () => {
-      const nextPath = current();
-      const [, queryString = ""] = nextPath.split("?");
-      const isCategoryNavigation = new URLSearchParams(queryString).has("category");
-      shouldScrollToTop.current = !isHistoryNavigation && !isCategoryNavigation;
-      setPath(nextPath);
-      isHistoryNavigation = false;
+      setPath(current());
     };
-    addEventListener("popstate", markHistoryNavigation);
-    addEventListener("hashchange", sync);
+    window.addEventListener("popstate", sync);
+    window.addEventListener("hashchange", sync);
     return () => {
-      removeEventListener("popstate", markHistoryNavigation);
-      removeEventListener("hashchange", sync);
+      window.removeEventListener("popstate", sync);
+      window.removeEventListener("hashchange", sync);
     };
   }, []);
 
-  // Hash changes are this application's route changes. Scrolling after the
-  // next route is rendered makes the behavior reliable for every internal link
-  // while leaving browser history restoration and same-page anchors untouched.
   useLayoutEffect(() => {
-    if (!shouldScrollToTop.current) return;
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    shouldScrollToTop.current = false;
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [path]);
 
   return (

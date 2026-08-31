@@ -74,6 +74,11 @@ export const productMatchesSubcategory = (product, subcategoryFilter) => {
   if (!subcategoryFilter) return true;
   if (!product) return false;
 
+  if (isSameCategory(product.subCategoryId, subcategoryFilter)) return true;
+  if (isSameCategory(product.subcategory, subcategoryFilter)) return true;
+  if (isSameCategory(product.subCategoryName, subcategoryFilter)) return true;
+  if (isSameCategory(product.subCategoryTitle, subcategoryFilter)) return true;
+
   const subFilterNorm = normalizeCategoryString(subcategoryFilter);
   const prodSub =
     product.subcategory ||

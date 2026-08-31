@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import PageHero from "../components/layout/PageHero";
 import FilterSidebar from "../components/products/FilterSidebar";
 import ProductCard from "../components/products/ProductCard";
@@ -7,6 +7,11 @@ import Pagination from "../components/common/Pagination";
 import Loader from "../components/common/Loader";
 import EmptyState from "../components/common/EmptyState";
 import { catalogService } from "../services/catalogService";
+import {
+  getCategoryHeading,
+  productMatchesCategory,
+  productMatchesSubcategory,
+} from "../utils/categoryNavigation";
 import productsHeroImage from "../assets/images/heroes/products-tablets.jpeg";
 
 export default function Products({ query = {} }) {
@@ -19,6 +24,17 @@ export default function Products({ query = {} }) {
   const [sort, setSort] = useState("Popularity");
   const [page, setPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const listingRef = useRef(null);
+
+  useEffect(() => {
+    setFilters({
+      category: query.category || "",
+      subcategory: query.subcategory || "",
+    });
+    setSearch(query.search || "");
+    setPage(1);
+  }, [query.category, query.subcategory, query.search]);
 
   useEffect(() => {
     Promise.all([
@@ -39,15 +55,8 @@ export default function Products({ query = {} }) {
       (product) =>
         (!search ||
           product.name.toLowerCase().includes(search.toLowerCase())) &&
-        (!filters.category ||
-          product.category === filters.category ||
-          product.categoryTitle === filters.category ||
-          product.category.toLowerCase().replaceAll(" ", "-") ===
-            filters.category) &&
-        (!filters.subcategory ||
-          product.subcategory === filters.subcategory ||
-          product.subCategoryName === filters.subcategory ||
-          product.subCategoryTitle === filters.subcategory)
+        productMatchesCategory(product, filters.category) &&
+        productMatchesSubcategory(product, filters.subcategory)
     );
 
     return sort.includes("Low")
@@ -56,15 +65,61 @@ export default function Products({ query = {} }) {
       ? a.sort((x, y) => y.price - x.price)
       : a;
   }, [data, filters, search, sort]);
-    const itemsPerPage = 8;
 
-  const totalPages = Math.ceil(list.length / itemsPerPage);
+  const itemsPerPage = 8;
+  const totalPages = Math.max(1, Math.ceil(list.length / itemsPerPage));
 
   const paginatedProducts = list.slice(
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
 
+  const scrollToListingTop = (behavior = "smooth") => {
+    if (listingRef.current) {
+      const header = document.querySelector("header");
+      const headerHeight = header ? header.getBoundingClientRect().height : 80;
+      const extraOffset = 16;
+      const elementTop =
+        listingRef.current.getBoundingClientRect().top + window.pageYOffset;
+      const targetY = Math.max(0, elementTop - headerHeight - extraOffset);
+
+      window.scrollTo({
+        top: targetY,
+        behavior,
+      });
+    }
+  };
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+    scrollToListingTop("smooth");
+  };
+
+  const handleFilterChange = (nextFilters) => {
+    setFilters(nextFilters);
+    setPage(1);
+    const params = new URLSearchParams();
+    if (nextFilters.category) params.set("category", nextFilters.category);
+    if (nextFilters.subcategory) params.set("subcategory", nextFilters.subcategory);
+    if (search) params.set("search", search);
+
+    const queryString = params.toString();
+    const targetHash = queryString ? `/products?${queryString}` : "/products";
+    if (location.hash !== `#${targetHash}`) {
+      window.location.hash = targetHash;
+    }
+  };
+
+  const headingText = useMemo(() => {
+    if (!filters.category && !filters.subcategory) return "Healthcare Products";
+    if (filters.category && filters.subcategory) {
+      return `${filters.category} — ${filters.subcategory}`;
+    }
+    if (filters.category) {
+      return getCategoryHeading(filters.category, data?.categories);
+    }
+    return `${filters.subcategory} Products`;
+  }, [filters.category, filters.subcategory, data?.categories]);
 
   return (
     <>
@@ -90,27 +145,29 @@ export default function Products({ query = {} }) {
                 categories={data.categories}
                 filters={filters}
                 onChange={(next) => {
-                  setFilters(next);
-                  setPage(1);
-                  // Auto-close sidebar on mobile after filter selection
+                  handleFilterChange(next);
                   if (window.innerWidth < 1024) setSidebarOpen(false);
                 }}
               />
             </div>
 
-            <section>
+            <section id="products-listing-section" ref={listingRef}>
               <h2 className="text-xl font-bold text-[#54206f]">
-                Healthcare Products
+                {headingText}
               </h2>
 
               <div className="my-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <span className="text-sm text-slate-500">
-                  Showing {list.length} products
+                  Showing {list.length} {list.length === 1 ? "product" : "products"}
                 </span>
 
                 <div className="w-full sm:ml-auto sm:w-64 md:w-72">
                   <SearchBar
-                    onSearch={setSearch}
+                    value={search}
+                    onSearch={(val) => {
+                      setSearch(val);
+                      setPage(1);
+                    }}
                     placeholder="Search products"
                   />
                 </div>
@@ -136,12 +193,21 @@ export default function Products({ query = {} }) {
                   ))}
                 </div>
               ) : (
-                <EmptyState />
+                <EmptyState
+                  title="No products found"
+                  message="Try adjusting your filters or search terms."
+                />
               )}
 
-              <div className="mt-8">
-                <Pagination page={page} totalPages={totalPages} onChange={setPage} />
-              </div>
+              {totalPages > 1 && (
+                <div className="mt-8">
+                  <Pagination
+                    page={page}
+                    totalPages={totalPages}
+                    onChange={handlePageChange}
+                  />
+                </div>
+              )}
             </section>
           </div>
         </main>
