@@ -5,6 +5,7 @@ import Button from "../components/common/Button";
 import { catalogService } from "../services/catalogService";
 import { money } from "../utils/formatters";
 import { useEnquiry } from "../hooks/useEnquiry";
+import productsHeroImage from "../assets/images/heroes/products-tablets.jpeg";
 
 export default function ProductDetails({ id }) {
   const [product, setProduct] = useState();
@@ -21,7 +22,7 @@ export default function ProductDetails({ id }) {
 
   return (
     <>
-      <PageHero title={product.name} />
+      <PageHero title={product.name} image={productsHeroImage} />
 
       <main className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 md:gap-10 md:px-8 md:py-12">
         {/* Product Images */}

@@ -6,8 +6,8 @@ import SearchBar from "../components/common/SearchBar";
 import Pagination from "../components/common/Pagination";
 import Loader from "../components/common/Loader";
 import EmptyState from "../components/common/EmptyState";
-import QuickView from "../components/products/QuickView";
 import { catalogService } from "../services/catalogService";
+import productsHeroImage from "../assets/images/heroes/products-tablets.jpeg";
 
 export default function Products({ query = {} }) {
   const [data, setData] = useState(null);
@@ -17,7 +17,6 @@ export default function Products({ query = {} }) {
   });
   const [search, setSearch] = useState(query.search || "");
   const [sort, setSort] = useState("Popularity");
-  const [quick, setQuick] = useState(null);
   const [page, setPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -67,91 +66,86 @@ export default function Products({ query = {} }) {
   );
 
 
-  if (!data) return <Loader />;
-
   return (
     <>
-      <PageHero title="Products" />
+      <PageHero title="Products" image={productsHeroImage} />
 
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 md:px-8">
-        {/* Mobile filter toggle */}
-        <button
-          className="mb-4 flex w-full items-center justify-center gap-2 rounded-lg border border-[#79259c] py-2.5 text-sm font-bold text-[#79259c] transition hover:bg-[#faf4fc] lg:hidden"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          aria-expanded={sidebarOpen}
-        >
-          {sidebarOpen ? "✕ Hide Filters" : "⚙ Show Filters"}
-        </button>
+      {!data ? (
+        <Loader />
+      ) : (
+        <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 md:px-8">
+          {/* Mobile filter toggle */}
+          <button
+            className="mb-4 flex w-full items-center justify-center gap-2 rounded-lg border border-[#79259c] py-2.5 text-sm font-bold text-[#79259c] transition hover:bg-[#faf4fc] lg:hidden"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            aria-expanded={sidebarOpen}
+          >
+            {sidebarOpen ? "✕ Hide Filters" : "⚙ Show Filters"}
+          </button>
 
-        <div className="grid gap-6 lg:grid-cols-[250px_1fr]">
-          {/* Sidebar */}
-          <div className={`${sidebarOpen ? "block" : "hidden"} lg:block`}>
-            <FilterSidebar
-              categories={data.categories}
-              filters={filters}
-              onChange={(next) => {
-                setFilters(next);
-                setPage(1);
-                // Auto-close sidebar on mobile after filter selection
-                if (window.innerWidth < 1024) setSidebarOpen(false);
-              }}
-            />
-          </div>
-
-          <section>
-            <h2 className="text-xl font-bold text-[#54206f]">
-              Healthcare Products
-            </h2>
-
-            <div className="my-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-              <span className="text-sm text-slate-500">
-                Showing {list.length} products
-              </span>
-
-              <div className="w-full sm:ml-auto sm:w-64 md:w-72">
-                <SearchBar
-                  onSearch={setSearch}
-                  placeholder="Search products"
-                />
-              </div>
-
-              <select
-                className="w-full rounded-md border border-slate-200 p-2 text-sm sm:w-auto"
-                value={sort}
-                onChange={(event) => setSort(event.target.value)}
-              >
-                <option>Popularity</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-              </select>
+          <div className="grid gap-6 lg:grid-cols-[250px_1fr]">
+            {/* Sidebar */}
+            <div className={`${sidebarOpen ? "block" : "hidden"} lg:block`}>
+              <FilterSidebar
+                categories={data.categories}
+                filters={filters}
+                onChange={(next) => {
+                  setFilters(next);
+                  setPage(1);
+                  // Auto-close sidebar on mobile after filter selection
+                  if (window.innerWidth < 1024) setSidebarOpen(false);
+                }}
+              />
             </div>
 
-            {list.length ? (
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
-                {/* {list.map((product) => ( */}
-                {paginatedProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    onQuickView={setQuick}
+            <section>
+              <h2 className="text-xl font-bold text-[#54206f]">
+                Healthcare Products
+              </h2>
+
+              <div className="my-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                <span className="text-sm text-slate-500">
+                  Showing {list.length} products
+                </span>
+
+                <div className="w-full sm:ml-auto sm:w-64 md:w-72">
+                  <SearchBar
+                    onSearch={setSearch}
+                    placeholder="Search products"
                   />
-                ))}
+                </div>
+
+                <select
+                  className="w-full rounded-md border border-slate-200 p-2 text-sm sm:w-auto"
+                  value={sort}
+                  onChange={(event) => setSort(event.target.value)}
+                >
+                  <option>Popularity</option>
+                  <option>Price: Low to High</option>
+                  <option>Price: High to Low</option>
+                </select>
               </div>
-            ) : (
-              <EmptyState />
-            )}
 
-            <div className="mt-8">
-              <Pagination page={page}  totalPages={totalPages} onChange={setPage} />
-            </div>
-          </section>
-        </div>
-      </main>
+              {list.length ? (
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+                  {paginatedProducts.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <EmptyState />
+              )}
 
-      <QuickView
-        product={quick}
-        onClose={() => setQuick(null)}
-      />
+              <div className="mt-8">
+                <Pagination page={page} totalPages={totalPages} onChange={setPage} />
+              </div>
+            </section>
+          </div>
+        </main>
+      )}
     </>
   );
 }

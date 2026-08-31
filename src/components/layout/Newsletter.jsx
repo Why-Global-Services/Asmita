@@ -69,6 +69,7 @@ export default function NavigationDropdown({
                   {category.name}
                 </a>
 
+                {/* Subcategory dropdown list temporarily disabled
                 {!!category.subcategories?.length && (
                   <div className="mt-2 ml-2 grid gap-1 border-l border-[#e8cfef] pl-3">
                     {category.subcategories.map((subcategory) => (
@@ -85,6 +86,7 @@ export default function NavigationDropdown({
                     ))}
                   </div>
                 )}
+                */}
               </div>
             ))}
           </div>

@@ -31,6 +31,8 @@ export default function HeaderSearch({ categories, onNavigate }) {
         href: `#${getCategoryRoute(category)}`,
       }));
 
+    // Subcategory matches temporarily disabled
+    /*
     const subcategoryMatches = categories.flatMap((category) =>
       (category.subcategories || [])
         .filter((subcategory) => matches(subcategory, term))
@@ -41,6 +43,7 @@ export default function HeaderSearch({ categories, onNavigate }) {
           href: `#${getCategoryRoute(category, subcategory)}`,
         }))
     );
+    */
 
     const productMatches = products
       .filter((product) => matches(product.name, term))
@@ -48,13 +51,13 @@ export default function HeaderSearch({ categories, onNavigate }) {
         key: `product-${product.id}`,
         label: product.name,
         meta: product.category,
-        href: `#/products/${product.id}`,
+        href: `#/products?search=${encodeURIComponent(product.name)}`,
       }));
 
     return [
       ...productMatches,
       ...categoryMatches,
-      ...subcategoryMatches,
+      // ...subcategoryMatches, // Subcategory search temporarily disabled
     ].slice(0, 7);
   }, [categories, products, query]);
 
@@ -112,7 +115,7 @@ export default function HeaderSearch({ categories, onNavigate }) {
             ))
           ) : (
             <p className="px-4 py-4 text-sm text-slate-500">
-              No matching products, categories, or subcategories.
+              No matching products or categories.
             </p>
           )}
         </div>

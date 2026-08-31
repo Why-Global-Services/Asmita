@@ -8,7 +8,6 @@ import BlogCard from '../components/blog/BlogCard';
 import TrustBar from '../components/layout/TrustBar';
 import Loader from '../components/common/Loader';
 import EmptyState from '../components/common/EmptyState';
-import QuickView from '../components/products/QuickView';
 import { catalogService } from '../services/catalogService';
 
 const sectionTitle = (eyebrow, title, description) => (
@@ -21,7 +20,6 @@ const sectionTitle = (eyebrow, title, description) => (
 
 export default function Home() {
   const [data, setData] = useState(null);
-  const [quickProduct, setQuickProduct] = useState(null);
   const [activeTab, setActiveTab] = useState('New Arrivals');
   const [error, setError] = useState(false);
 
@@ -54,9 +52,9 @@ export default function Home() {
     <Hero />
     <TrustBar />
 
-    <section className="mx-auto max-w-7xl px-5 py-14 sm:px-8">
+    <section className="mx-auto max-w-6xl px-5 py-14 sm:px-8">
       {sectionTitle('EXPLORE WITH CONFIDENCE', 'Shop by Category', 'Everything you need for everyday care, in one trusted place.')}
-      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+      <div className="mt-10 grid w-full grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 lg:gap-10">
         {data.categories.map(category => (
           <CategoryCard key={category.id} category={category} />
         ))}
@@ -104,7 +102,7 @@ export default function Home() {
         </a>
       </div>
       <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-        {displayedProducts.map(product => <ProductCard key={product.id} product={product} onQuickView={setQuickProduct} />)}
+        {displayedProducts.map(product => <ProductCard key={product.id} product={product} />)}
       </div>
     </section>
 
@@ -120,6 +118,5 @@ export default function Home() {
     </section>
 
     <TrustBar />
-    <QuickView product={quickProduct} onClose={() => setQuickProduct(null)} />
   </main>;
 }

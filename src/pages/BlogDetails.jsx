@@ -5,6 +5,7 @@ import EmptyState from "../components/common/EmptyState";
 import BlogCard from "../components/blog/BlogCard";
 import { catalogService } from "../services/catalogService";
 import { date } from "../utils/formatters";
+import blogHeroImage from "../assets/images/heroes/blog-research.jpeg";
 
 export default function BlogDetails({ id }) {
   const [blog, setBlog] = useState(null);
@@ -38,7 +39,7 @@ export default function BlogDetails({ id }) {
   if (!blog) {
     return (
       <>
-        <PageHero title="Blog Post Not Found" />
+        <PageHero title="Blog Post Not Found" image={blogHeroImage} />
         <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 md:px-8">
           <EmptyState
             title="Blog Article Not Found"
@@ -64,7 +65,7 @@ export default function BlogDetails({ id }) {
 
   return (
     <>
-      <PageHero title={blog.title} />
+      <PageHero title={blog.title} image={blogHeroImage} />
 
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:px-8 md:py-12">
         {/* Back Link */}

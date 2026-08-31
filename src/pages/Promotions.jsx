@@ -3,6 +3,7 @@ import PageHero from "../components/layout/PageHero";
 import PromotionCard from "../components/promotions/PromotionCard";
 import Loader from "../components/common/Loader";
 import { catalogService } from "../services/catalogService";
+import promotionsHeroImage from "../assets/images/heroes/promotions-capsules.jpeg";
 
 export default function Promotions() {
   const [items, setItems] = useState();
@@ -16,6 +17,7 @@ export default function Promotions() {
       <PageHero
         title="Promotions"
         subtitle="Health essentials, exceptional value."
+        image={promotionsHeroImage}
       />
 
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 md:px-8 md:py-12">

@@ -2,6 +2,7 @@ import { useState } from "react";
 import PageHero from "../components/layout/PageHero";
 import Button from "../components/common/Button";
 import { catalogService } from "../services/catalogService";
+import contactHeroImage from "../assets/images/heroes/contact-stethoscope.jpeg";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -35,7 +36,7 @@ export default function Contact() {
 
   return (
     <>
-      <PageHero title="Contact Us" />
+      <PageHero title="Contact Us" image={contactHeroImage} />
 
       <main className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 md:gap-10 md:px-8 md:py-12">
         {/* Contact Details */}

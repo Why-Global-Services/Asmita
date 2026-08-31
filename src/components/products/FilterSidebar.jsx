@@ -69,7 +69,7 @@ export default function FilterSidebar({
           })}
         </div>
 
-        {/* Sub Category */}
+        {/* Subcategory section temporarily disabled
         {subcategories.length > 0 && (
           <>
             <b className="mt-5 block text-sm text-slate-900">Sub-category</b>
@@ -90,6 +90,7 @@ export default function FilterSidebar({
             </div>
           </>
         )}
+        */}
 
         {(filters.category || filters.subcategory) && (
           <button

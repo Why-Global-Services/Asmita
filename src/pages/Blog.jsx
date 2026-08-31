@@ -3,6 +3,7 @@ import PageHero from "../components/layout/PageHero";
 import BlogCard from "../components/blog/BlogCard";
 import Loader from "../components/common/Loader";
 import { catalogService } from "../services/catalogService";
+import blogHeroImage from "../assets/images/heroes/blog-research.jpeg";
 
 export default function Blog() {
   const [items, setItems] = useState();
@@ -13,7 +14,7 @@ export default function Blog() {
 
   return (
     <>
-      <PageHero title="Health & Wellness Blog" />
+      <PageHero title="Health & Wellness Blog" image={blogHeroImage} />
 
       <main className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:px-8 lg:grid-cols-[1fr_250px]">
         {/* Blog Content */}

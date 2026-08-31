@@ -3,6 +3,7 @@ import PageHero from "../components/layout/PageHero";
 import ProductCard from "../components/products/ProductCard";
 import Loader from "../components/common/Loader";
 import { catalogService } from "../services/catalogService";
+import newArrivalsHeroImage from "../assets/images/heroes/new-arrivals-capsule.jpeg";
 export default function NewArrivals() {
   const [items, setItems] = useState();
   useEffect(() => {
@@ -13,6 +14,7 @@ export default function NewArrivals() {
       <PageHero
         title="New Arrivals"
         subtitle="Discover our latest healthcare essentials."
+        image={newArrivalsHeroImage}
       />
       <section className="mx-auto mt-2 max-w-7xl px-4 py-10 sm:px-6 md:px-8 md:py-12">
         <div className="mb-8 text-center">

@@ -1,9 +1,10 @@
 import PageHero from "../components/layout/PageHero";
 import TrustBar from "../components/layout/TrustBar";
+import aboutHeroImage from "../assets/images/heroes/about-laboratory.jpeg";
 export default function About() {
   return (
     <>
-      <PageHero title="About Us" />
+      <PageHero title="About Us" image={aboutHeroImage} />
       <main className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 md:grid-cols-2 sm:px-8">
         <section>
           <p className="text-xs font-bold tracking-widest text-[#79259c]">

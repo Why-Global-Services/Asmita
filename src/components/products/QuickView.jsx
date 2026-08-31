@@ -2,19 +2,21 @@
 
 
 
+// Product QuickView modal is disabled in favor of direct full-page product detail navigation.
+// Code preserved for reference.
+/*
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import { money } from "../../utils/formatters";
 import { useEnquiry } from "../../hooks/useEnquiry";
 
-export default function QuickView({ product, onClose }) {
+export function QuickViewLegacy({ product, onClose }) {
   const { openEnquiry } = useEnquiry();
 
   return (
     <Modal open={Boolean(product)} onClose={onClose}>
       {product && (
         <div className="grid max-h-[80vh] gap-6 overflow-y-auto md:grid-cols-2 md:items-center md:gap-8">
-          {/* Product Image */}
           <div className="grid h-56 place-items-center overflow-hidden rounded-xl bg-[#faf2fc] p-6 text-7xl sm:h-64 sm:text-8xl md:h-72 md:text-9xl">
             {product.productImages && product.productImages[0] ? (
               <img
@@ -27,8 +29,6 @@ export default function QuickView({ product, onClose }) {
             )}
           </div>
 
-
-          {/* Product Details */}
           <section className="text-center md:text-left">
             <small className="font-bold uppercase tracking-widest text-[#8d57a2]">
               {product.category}
@@ -53,7 +53,6 @@ export default function QuickView({ product, onClose }) {
               {product.description}
             </p>
 
-            {/* Buttons */}
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Button
                 className="w-full sm:flex-1"
@@ -77,4 +76,9 @@ export default function QuickView({ product, onClose }) {
       )}
     </Modal>
   );
+}
+*/
+
+export default function QuickView() {
+  return null;
 }

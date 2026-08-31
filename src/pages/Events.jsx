@@ -4,6 +4,7 @@ import EventCard from "../components/events/EventCard";
 import Pagination from "../components/common/Pagination";
 import Loader from "../components/common/Loader";
 import { catalogService } from "../services/catalogService";
+import eventsHeroImage from "../assets/images/heroes/events-healthcare.jpeg";
 
 export default function Events() {
   const [items, setItems] = useState();
@@ -23,6 +24,7 @@ export default function Events() {
       <PageHero
         title="Events"
         subtitle="Connecting Healthcare. Inspiring Better Tomorrow."
+        image={eventsHeroImage}
       />
 
       <main className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:px-6 md:px-8 lg:grid-cols-[220px_1fr]">
