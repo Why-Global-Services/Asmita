@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { FaTimes, FaUpload } from "react-icons/fa";
 import { createSubCategory, getCategories, editSubCategory } from "../Interceptor/interceptor";
 
 const SubcategoryForm = () => {
@@ -13,7 +14,9 @@ const SubcategoryForm = () => {
     categoryTitle: "",
     subCategoryTitle: "",
     status: true,
+    subCategoryImage: null,
   });
+  const [imagePreview, setImagePreview] = useState("");
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -44,7 +47,9 @@ const SubcategoryForm = () => {
         categoryTitle: subcategory.categoryTitle || "",
         subCategoryTitle: subcategory.subCategoryTitle || "",
         status: subcategory.status !== undefined ? subcategory.status : true,
+        subCategoryImage: null,
       });
+      setImagePreview(subcategory.subCategoryImage || "");
     }
   }, [isEditMode, subcategory]);
 
@@ -69,27 +74,37 @@ const SubcategoryForm = () => {
     navigate("/subcategory");
   };
 
+  const handleImageChange = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setError("Please choose a supported image file.");
+      event.target.value = "";
+      return;
+    }
+
+    setError("");
+    setFormData((prev) => ({ ...prev, subCategoryImage: file }));
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const removeImage = () => {
+    setFormData((prev) => ({ ...prev, subCategoryImage: null }));
+    setImagePreview(isEditMode ? subcategory?.subCategoryImage || "" : "");
+  };
+
   const handleSubmit = async () => {
-    // Create a plain object for the payload
-    const payload = {
-      categoryId: formData.categoryId,
-      categoryTitle: formData.categoryTitle,
-      subCategoryTitle: formData.subCategoryTitle.trim(),
-      status: formData.status,
-    };
-
-    console.log("Payload Before Submission:", JSON.stringify(payload, null, 2)); // Debug log
-
     // Validation
-    if (!payload.categoryId) {
+    if (!formData.categoryId) {
       setError("Parent Category is required.");
       return;
     }
-    if (!payload.subCategoryTitle || payload.subCategoryTitle === "") {
+    if (!formData.subCategoryTitle.trim()) {
       setError("Subcategory Title is required and cannot be empty.");
       return;
     }
-    if (!payload.categoryTitle) {
+    if (!formData.categoryTitle) {
       setError("Category Title could not be determined.");
       return;
     }
@@ -98,6 +113,15 @@ const SubcategoryForm = () => {
     setError("");
 
     try {
+      const payload = new FormData();
+      payload.append("categoryId", formData.categoryId);
+      payload.append("categoryTitle", formData.categoryTitle);
+      payload.append("subCategoryTitle", formData.subCategoryTitle.trim());
+      payload.append("status", String(formData.status));
+      if (formData.subCategoryImage) {
+        payload.append("subCategoryImage", formData.subCategoryImage);
+      }
+
       let response;
       if (isEditMode) {
         response = await editSubCategory(subcategory._id, payload);
@@ -163,6 +187,40 @@ const SubcategoryForm = () => {
                 </option>
               )}
             </select>
+          </div>
+
+          <div className="w-full mb-4">
+            <label className="block text-sm font-medium text-gray-600 mb-2" htmlFor="subCategoryImage">
+              Subcategory Image
+            </label>
+            <label
+              htmlFor="subCategoryImage"
+              className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 p-6 text-sm text-gray-600 hover:border-orange-400"
+            >
+              <FaUpload className="text-orange-500" />
+              Choose image
+            </label>
+            <input
+              id="subCategoryImage"
+              type="file"
+              accept="image/png,image/jpeg,image/jpg,image/webp,image/avif"
+              className="sr-only"
+              onChange={handleImageChange}
+              disabled={loading}
+            />
+            {imagePreview && (
+              <div className="relative mt-3 h-32 w-32">
+                <img src={imagePreview} alt="Subcategory preview" className="h-full w-full rounded-lg border border-gray-200 object-cover" />
+                {formData.subCategoryImage && (
+                  <button type="button" onClick={removeImage} className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white" aria-label="Remove selected image">
+                    <FaTimes size={12} />
+                  </button>
+                )}
+              </div>
+            )}
+            {isEditMode && !formData.subCategoryImage && imagePreview && (
+              <p className="mt-2 text-xs text-gray-500">Current image — choose a new file to replace it.</p>
+            )}
           </div>
 
           <div className="w-full mb-4">

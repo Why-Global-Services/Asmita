@@ -146,7 +146,7 @@ const CategoryForm = () => {
                 <img
                   src={uploadedImages[0]}
                   alt="Uploaded image"
-                  className="w-full h-32 object-cover rounded-lg"
+                  className="w-36 h-36 aspect-square object-contain rounded-lg border border-gray-200 p-2 bg-gray-50"
                 />
                 <button
                   onClick={removeImage}

@@ -112,14 +112,14 @@ const CategoryTable = () => {
                   : row.categoryImage
               }
               alt={row.categoryTitle || 'Category'}
-              className="w-6 h-6 object-cover rounded-md"
+              className="w-8 h-8 object-contain rounded border border-gray-200 p-0.5 bg-gray-50"
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = 'https://placehold.in/200.png';
               }}
             />
           ) : (
-            <div className="w-6 h-6 bg-gray-100 flex items-center justify-center rounded-md">
+            <div className="w-8 h-8 bg-gray-100 flex items-center justify-center rounded border border-gray-200 text-xs">
               -
             </div>
           )}
@@ -422,7 +422,7 @@ const CategoryTable = () => {
                       : categoryToView.categoryImage || 'https://via.placeholder.com/208x160'
                   }
                   alt={categoryToView.categoryTitle}
-                  className="w-52 h-40 object-contain rounded-md border border-gray-200 p-2"
+                  className="w-48 h-48 object-contain rounded-lg border border-gray-200 p-2 bg-gray-50"
                   onError={(e) => {
                     e.target.src = 'https://via.placeholder.com/208x160';
                   }}

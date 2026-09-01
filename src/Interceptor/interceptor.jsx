@@ -8,18 +8,18 @@ const apiInstance = axios.create({
 
 // Handle token expiration
 const handleTokenExpiration = () => {
-  console.error("Token expired, logging out...");
+  console.error("Token expired or invalid, logging out...");
   localStorage.removeItem("token");
-  toast.error("Your session has expired. Please log in again.");
+  toast.error("Your session has expired or is invalid. Please log in again.");
   setTimeout(() => {
     window.location.href = "/";
-  }, 3000);
+  }, 1500);
 };
 
 apiInstance.interceptors.request.use(
   (config) => {
     const authToken = localStorage.getItem("token");
-    if (authToken) {
+    if (authToken && authToken !== "undefined" && authToken !== "null") {
       config.headers.Authorization = `Bearer ${authToken}`;
     }
     return config;
@@ -32,7 +32,7 @@ apiInstance.interceptors.request.use(
 
 apiInstance.interceptors.response.use(
   (response) => {
-    if (response.data.accessToken) {
+    if (response.data?.accessToken) {
       localStorage.setItem("token", response.data.accessToken); // Store accessToken
     }
     return response;
@@ -42,7 +42,13 @@ apiInstance.interceptors.response.use(
       error?.response?.data?.message || error?.response?.data?.status;
     const statusCode = error?.response?.status;
 
-    if (statusCode === 401 || errorMessage === "Token expired") {
+    if (
+      statusCode === 401 ||
+      (statusCode === 403 && (errorMessage === "Invalid or expired token" || errorMessage === "No token provided" || errorMessage === "Unauthorized")) ||
+      errorMessage === "Token expired" ||
+      errorMessage === "Invalid or expired token" ||
+      errorMessage === "No token provided"
+    ) {
       handleTokenExpiration();
     } else if (errorMessage) {
       toast.error(errorMessage);
@@ -152,12 +158,16 @@ export const getSubCategories = async () => {
 };
 
 export const createSubCategory = async (data) => {
-  const res = await apiInstance.post(`/createSubCategory`, data );
+  const res = await apiInstance.post(`/createSubCategory`, data, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return res;
 };
 
 export const editSubCategory = async (id, data) => {
-  const res = await apiInstance.put(`/updatesubCategory/${id}`, data, );
+  const res = await apiInstance.put(`/updatesubCategory/${id}`, data, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return res;
 };
 
