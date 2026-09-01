@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import Hero from '../components/home/Hero';
-import CategoryCard from '../components/home/CategoryCard';
 import ProductCard from '../components/products/ProductCard';
 import PromotionCard from '../components/promotions/PromotionCard';
 import EventCard from '../components/events/EventCard';
@@ -9,6 +8,7 @@ import TrustBar from '../components/layout/TrustBar';
 import Loader from '../components/common/Loader';
 import EmptyState from '../components/common/EmptyState';
 import { catalogService } from '../services/catalogService';
+import { getCategoryRoute, normalizeCategoryString } from '../utils/categoryNavigation';
 
 const sectionTitle = (eyebrow, title, description) => (
   <div className="mx-auto max-w-xl text-center">
@@ -45,6 +45,28 @@ export default function Home() {
     return activeTab === 'Featured Products' ? data.products.slice(5, 10) : data.products.slice(0, 5);
   }, [activeTab, data]);
 
+  const subcategories = useMemo(() => {
+    if (!data) return [];
+
+    const uniqueSubcategories = new Map();
+    data.categories.forEach((category) => {
+      (category.subcategories || []).forEach((rawSubcategory) => {
+        const subcategory = typeof rawSubcategory === 'string'
+          ? { name: rawSubcategory, subCategoryTitle: rawSubcategory }
+          : rawSubcategory;
+        const name = subcategory?.name || subcategory?.subCategoryTitle || subcategory?.title;
+        if (!name) return;
+
+        const key = subcategory.id || subcategory._id || normalizeCategoryString(name);
+        if (!uniqueSubcategories.has(key)) {
+          uniqueSubcategories.set(key, { category, subcategory: { ...subcategory, name } });
+        }
+      });
+    });
+
+    return Array.from(uniqueSubcategories.values());
+  }, [data]);
+
   if (error) return <EmptyState title="We could not load the home page" message="Please refresh and try again." />;
   if (!data) return <Loader label="Preparing your healthcare store..." />;
 
@@ -53,11 +75,36 @@ export default function Home() {
     <TrustBar />
 
     <section className="mx-auto max-w-6xl px-5 py-14 sm:px-8">
-      {sectionTitle('EXPLORE WITH CONFIDENCE', 'Shop by Category', 'Everything you need for everyday care, in one trusted place.')}
-      <div className="mt-10 grid w-full grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 lg:gap-10">
-        {data.categories.map(category => (
-          <CategoryCard key={category.id} category={category} />
-        ))}
+      {sectionTitle('EXPLORE WITH CONFIDENCE', 'Categories / Our Products', 'Choose a product group to explore our healthcare range.')}
+      <div className="mt-10 grid grid-cols-2 justify-items-center gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 md:grid-cols-4 lg:grid-cols-6">
+        {subcategories.map(({ category, subcategory }) => {
+          const imageSrc = subcategory.subCategoryImage || subcategory.image || subcategory.imageUrl;
+
+          return (
+            <a
+              key={subcategory.id || subcategory._id || `${category.id}-${subcategory.name}`}
+              href={`#${getCategoryRoute(category, subcategory)}`}
+              className="group flex min-w-0 flex-col items-center text-center"
+            >
+              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-[#faf2fc] ring-1 ring-[#79259c]/10 transition duration-200 group-hover:scale-105 group-hover:ring-[#79259c]/40 sm:h-24 sm:w-24">
+                {imageSrc ? (
+                  <img
+                    src={imageSrc}
+                    alt={subcategory.name}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span className="text-2xl text-[#79259c]" aria-hidden="true">
+                    {subcategory.icon || '✦'}
+                  </span>
+                )}
+              </div>
+              <span className="mt-3 max-w-28 text-sm font-semibold leading-5 text-slate-800 transition group-hover:text-[#79259c]">
+                {subcategory.name}
+              </span>
+            </a>
+          );
+        })}
       </div>
     </section>
 

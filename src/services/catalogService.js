@@ -164,6 +164,9 @@ export const catalogService = {
         subCategoryTitle: subTitle,
         categoryId: sub.categoryId,
         categoryTitle: sub.categoryTitle,
+        subCategoryImage: sub.subCategoryImage || sub.subcategoryImage || sub.image || sub.imageUrl || '',
+        image: sub.subCategoryImage || sub.subcategoryImage || sub.image || sub.imageUrl || '',
+        icon: sub.icon || '',
       };
 
       const pushSub = (key) => {
