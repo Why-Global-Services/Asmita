@@ -1,6 +1,11 @@
 const { contact } = require("../../models/contact.model");
 const ApiError = require("../../utils/apiError");
 
+const isAdminRole = (role) => {
+  const r = (role || "").toLowerCase();
+  return r === "superadmin" || r === "admin";
+};
+
 const createContactUs = async(req)=>{
     const {body} = req;
 
@@ -15,20 +20,16 @@ const createContactUs = async(req)=>{
 };
 
 const getContact = async (req) => {
-  if (req.user.role !== "superAdmin" && req.user.role !== "admin") {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
   const fetchedContact = await contact.find();
 
-  if (fetchedContact.length === 0) {
-    throw new ApiError(404, "No contact found");
-  }
-
   return {
     success: true,
     message: "Contact fetched successfully",
-    data: fetchedContact,
+    data: fetchedContact || [],
   };
 };
 

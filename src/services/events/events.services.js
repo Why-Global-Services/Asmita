@@ -2,12 +2,17 @@ const { event } = require("../../models/event.model");
 const ApiError = require("../../utils/apiError");
 const { uploadToCloud } = require("../../utils/uploadFileToS3");
 
+const isAdminRole = (role) => {
+  const r = (role || "").toLowerCase();
+  return r === "superadmin" || r === "admin";
+};
+
 /* ─── ADMIN ─── */
 
 const createEvent = async (req) => {
   const { body } = req;
 
-  if (!["superAdmin", "admin"].includes(req.user.role)) {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
@@ -43,7 +48,7 @@ const createEvent = async (req) => {
 };
 
 const getEvents = async (req) => {
-  if (!["superAdmin", "admin"].includes(req.user.role)) {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
@@ -52,7 +57,7 @@ const getEvents = async (req) => {
   return {
     success: true,
     message: "Events fetched successfully",
-    data: events,
+    data: events || [],
   };
 };
 
@@ -60,7 +65,7 @@ const updateEvent = async (req) => {
   const { body } = req;
   const id = req.params.id;
 
-  if (!["superAdmin", "admin"].includes(req.user.role)) {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
@@ -90,7 +95,7 @@ const updateEvent = async (req) => {
 const deleteEvent = async (req) => {
   const id = req.params.id;
 
-  if (!["superAdmin", "admin"].includes(req.user.role)) {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 

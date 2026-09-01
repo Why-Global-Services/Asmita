@@ -18,9 +18,9 @@ adminRouter.route("/deleteCategory/:id").delete(verifyAccessToken, adminControll
 
 
 // Sub Category
-adminRouter.route("/createSubCategory").post(verifyAccessToken, adminController.createSubCategoryController)
+adminRouter.route("/createSubCategory").post(verifyAccessToken, uploads.single("subCategoryImage"), adminController.createSubCategoryController)
 adminRouter.route("/getSubCategory").get(verifyAccessToken, adminController.getSubCategoryController)
-adminRouter.route("/updatesubCategory/:id").put(verifyAccessToken, adminController.updateSubCategoryController)
+adminRouter.route("/updatesubCategory/:id").put(verifyAccessToken, uploads.single("subCategoryImage"), adminController.updateSubCategoryController)
 adminRouter.route("/deleteSubCategory/:id").delete(verifyAccessToken, adminController.deletesubCategoryController)
 
 

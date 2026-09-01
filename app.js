@@ -38,21 +38,22 @@ app.use((req, res, next)=>{
     next(new ApiError(404,"Not found API"))
 });
 
-app.use((err, req, res, next) =>{
-    if(err instanceof ApiError){
+app.use((err, req, res, next) => {
+    res.locals.errorMessage = err.message || "Internal Server Error";
+    if (err instanceof ApiError) {
         res.status(err.statusCode).json({
-            status:false,
-            message:err.message
+            status: false,
+            message: err.message
         });
-        console.log("err",err.message)
-    }else{
-        console.log("err:500",err)
+        console.log("err", err.message);
+    } else {
+        console.log("err:500", err);
         res.status(500).json({
-            status:false,
-            message:err.message
-        })
+            status: false,
+            message: err.message || "Internal Server Error"
+        });
     }
-})
+});
 
 
 

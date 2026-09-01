@@ -1,13 +1,17 @@
 const { subCategory } = require("../../models/subcategory.model");
 const ApiError = require("../../utils/apiError");
+const { uploadToCloud } = require("../../utils/uploadFileToS3");
+
+const isAdminRole = (role) => {
+  const r = (role || "").toLowerCase();
+  return r === "superadmin" || r === "admin";
+};
 
 const createSubCategory = async (req) => {
-  console.log("Received req.body:", req.body); // Debug log
-
   const { subCategoryTitle, categoryId, categoryTitle, status } = req.body;
 
   // Check user role
-  if (req.user?.role !== "superAdmin" && req.user?.role !== "admin") {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
@@ -32,10 +36,15 @@ const createSubCategory = async (req) => {
   }
 
   // Create subcategory
+  const subCategoryImage = req.file
+    ? await uploadToCloud(req.file, "subcategories")
+    : "";
+
   const createdSubCategory = await subCategory.create({
     categoryId,
     categoryTitle,
     subCategoryTitle,
+    subCategoryImage,
     status: status !== undefined ? status : true,
   });
 
@@ -46,20 +55,16 @@ const createSubCategory = async (req) => {
   };
 };
 const getSubCategory = async (req) => {
-  if (req.user.role !== "superAdmin" && req.user.role !== "admin") {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
   const fetchedSubCategory = await subCategory.find();
 
-  if (fetchedSubCategory.length === 0) {
-    throw new ApiError(404, "No sub Category found");
-  }
-
   return {
     success: true,
     message: "Fetched sub category successfully",
-    data: fetchedSubCategory,
+    data: fetchedSubCategory || [],
   };
 };
 
@@ -67,15 +72,20 @@ const updateSubCategory = async (req) => {
   const { body } = req;
   const id = req.params.id;
 
-  if (req.user.role !== "superAdmin" && req.user.role !== "admin") {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
-  const subCategoryTitle = req.body?.subCategoryTitle;
+  const subCategoryTitle = req.body?.subCategoryTitle?.trim();
+  const existingSubCategory = await subCategory.findById(id);
 
-  if (!subCategoryTitle) {
-    // Check if already exists (case-insensitive)
+  if (!existingSubCategory) {
+    throw new ApiError(404, "Subcategory not found");
+  }
+
+  if (subCategoryTitle) {
     const existing = await subCategory.findOne({
+      _id: { $ne: id },
       subCategoryTitle: {
         $regex: new RegExp("^" + subCategoryTitle + "$", "i"),
       },
@@ -86,8 +96,14 @@ const updateSubCategory = async (req) => {
     }
   }
 
-  const updatedSubCategory = await subCategory.findByIdAndUpdate(id, {
-    ...body,
+  const updateData = { ...body };
+  if (req.file) {
+    updateData.subCategoryImage = await uploadToCloud(req.file, "subcategories");
+  }
+
+  const updatedSubCategory = await subCategory.findByIdAndUpdate(id, updateData, {
+    new: true,
+    runValidators: true,
   });
 
   return {
@@ -100,7 +116,7 @@ const updateSubCategory = async (req) => {
 const deleteSubCategory = async (req) => {
   const id = req.params.id;
 
-  if (req.user.role !== "superAdmin" && req.user.role !== "admin") {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 

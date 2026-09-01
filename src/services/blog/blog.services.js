@@ -11,12 +11,17 @@ const generateSlug = (title) =>
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
 
+const isAdminRole = (role) => {
+  const r = (role || "").toLowerCase();
+  return r === "superadmin" || r === "admin";
+};
+
 /* ─── ADMIN ─── */
 
 const createBlog = async (req) => {
   const { body } = req;
 
-  if (!["superAdmin", "admin"].includes(req.user.role)) {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
@@ -52,7 +57,7 @@ const createBlog = async (req) => {
 };
 
 const getBlogs = async (req) => {
-  if (!["superAdmin", "admin"].includes(req.user.role)) {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
@@ -61,7 +66,7 @@ const getBlogs = async (req) => {
   return {
     success: true,
     message: "Blogs fetched successfully",
-    data: blogs,
+    data: blogs || [],
   };
 };
 
@@ -69,7 +74,7 @@ const updateBlog = async (req) => {
   const { body } = req;
   const id = req.params.id;
 
-  if (!["superAdmin", "admin"].includes(req.user.role)) {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
@@ -109,7 +114,7 @@ const updateBlog = async (req) => {
 const deleteBlog = async (req) => {
   const id = req.params.id;
 
-  if (!["superAdmin", "admin"].includes(req.user.role)) {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 

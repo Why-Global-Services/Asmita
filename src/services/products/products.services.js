@@ -5,11 +5,16 @@ const { subCategory } = require("../../models/subcategory.model");
 const ApiError = require("../../utils/apiError");
 const { uploadToCloud } = require("../../utils/uploadFileToS3");
 
+const isAdminRole = (role) => {
+  const r = (role || "").toLowerCase();
+  return r === "superadmin" || r === "admin";
+};
+
 const createProduct = async (req) => {
   const { body } = req;
 
   // ✅ 1️⃣ Role-based access
-  if (!["superAdmin", "admin"].includes(req.user.role)) {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
@@ -75,20 +80,16 @@ const createProduct = async (req) => {
 
 
 const getProducts = async (req) => {
-  if (req.user.role !== "superAdmin" && req.user.role !== "admin") {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
   const fetchedProducts = await products.find();
 
-  if (fetchedProducts.length === 0) {
-    throw new ApiError(404, "No pdoucts found");
-  }
-
   return {
     success: true,
     message: "Products fetched successfully",
-    data: fetchedProducts,
+    data: fetchedProducts || [],
   };
 };
 
@@ -97,7 +98,7 @@ const updateProduct = async (req) => {
   const id = req.params.id;
 
   // 1️⃣ Role check
-  if (!["superAdmin", "admin"].includes(req.user.role)) {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
@@ -170,7 +171,7 @@ const updateProduct = async (req) => {
 const deleteProduct = async (req) => {
   const id = req.params.id;
 
-  if (req.user.role !== "superAdmin" && req.user.role !== "admin") {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
@@ -358,7 +359,7 @@ return {success: true, message: "Fetched Booked products", data:getBookedProduct
 const deleteBookedProduct = async(req)=>{
   const id = req.params.id;
 
-  if (req.user.role !== "superAdmin" && req.user.role !== "admin") {
+  if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 

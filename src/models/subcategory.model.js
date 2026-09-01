@@ -23,6 +23,11 @@ const subCategorySchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    subCategoryImage: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     status: {
       type: Boolean,
       default: true,
