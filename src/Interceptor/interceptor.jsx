@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 const apiInstance = axios.create({
   baseURL: "http://localhost:5003/v1/admin",
-  // baseURL: "https://theerahapi.whydev.in/v1/admin",
+  // baseURL: "https://asmitaapi.whydev.in/v1/admin",
 });
 
 // Handle token expiration
@@ -152,8 +152,8 @@ export const getBookedProducts = async () => {
 };
 
 /* ------------------ SUB-CATEGORIES ------------------ */
-export const getSubCategories = async () => {
-  const res = await apiInstance.get(`/getSubCategory`);
+export const getSubCategories = async (params) => {
+  const res = await apiInstance.get(`/getSubCategory`, { params });
   return res;
 };
 
@@ -165,16 +165,18 @@ export const createSubCategory = async (data) => {
 };
 
 export const editSubCategory = async (id, data) => {
+  // Auto-detect content type: FormData for file uploads, JSON for plain objects
+  const isFormData = data instanceof FormData;
   const res = await apiInstance.put(`/updatesubCategory/${id}`, data, {
-    headers: { "Content-Type": "multipart/form-data" },
+    headers: {
+      "Content-Type": isFormData ? "multipart/form-data" : "application/json",
+    },
   });
   return res;
 };
 
 export const deleteSubCategory = async (id) => {
-  const res = await apiInstance.delete(`/deleteSubCategory/${id}`, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const res = await apiInstance.delete(`/deleteSubCategory/${id}`);
   return res;
 };
 

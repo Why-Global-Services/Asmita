@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaTimes, FaUpload } from "react-icons/fa";
+import { toast } from "sonner";
 import { createSubCategory, getCategories, editSubCategory } from "../Interceptor/interceptor";
 
 const SubcategoryForm = () => {
@@ -10,7 +11,7 @@ const SubcategoryForm = () => {
   const isEditMode = mode === "edit";
 
   const [formData, setFormData] = useState({
-    categoryId: "", // Changed to camelCase to match payload
+    categoryId: "",
     categoryTitle: "",
     subCategoryTitle: "",
     status: true,
@@ -43,7 +44,7 @@ const SubcategoryForm = () => {
   useEffect(() => {
     if (isEditMode && subcategory) {
       setFormData({
-        categoryId: subcategory.categoryId || "", // Match backend field name
+        categoryId: subcategory.categoryId || "",
         categoryTitle: subcategory.categoryTitle || "",
         subCategoryTitle: subcategory.subCategoryTitle || "",
         status: subcategory.status !== undefined ? subcategory.status : true,
@@ -128,13 +129,20 @@ const SubcategoryForm = () => {
       } else {
         response = await createSubCategory(payload);
       }
+
       console.log(isEditMode ? "Subcategory updated:" : "Subcategory created:", response.data);
+      toast.success(
+        isEditMode
+          ? "Subcategory updated successfully!"
+          : "Subcategory created successfully!"
+      );
       navigate("/subcategory");
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
         "An error occurred while saving the subcategory.";
       setError(errorMessage);
+      toast.error(errorMessage);
       console.error("Error saving subcategory:", error.response?.data || error.message);
     } finally {
       setLoading(false);
