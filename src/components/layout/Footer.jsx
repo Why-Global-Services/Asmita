@@ -1,3 +1,5 @@
+import AsmitaLogo from "./AsmitaLogo";
+
 const links = [
   ["Home", "/"],
   ["About Us", "/about"],
@@ -20,12 +22,12 @@ export default function Footer() {
         {/* Company */}
         <div>
           <a href="#/" onClick={scrollToTop} className="font-serif text-3xl font-bold">
-            ✦Asmita
+            <AsmitaLogo/>
           </a>
 
-          <small className="block text-white/70">
+          {/* <small className="block text-white/70">
             Comercio,(Su),Lda
-          </small>
+          </small> */}
 
           <p className="mx-auto mt-5 max-w-xs text-sm leading-6 text-white/75 sm:mx-0">
             Your trusted partner in quality medical products and healthcare
