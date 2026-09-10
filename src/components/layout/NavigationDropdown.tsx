@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getCategoryRoute } from "../../utils/categoryNavigation";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 type SubCategoryItem = {
   id?: string;
@@ -26,6 +27,7 @@ export default function NavigationDropdown({
   onNavigate,
 }: NavigationDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useLanguage();
 
   const close = () => {
     setIsOpen(false);
@@ -58,7 +60,7 @@ export default function NavigationDropdown({
         aria-haspopup="menu"
         onClick={toggleOnTouch}
       >
-        Products
+        {t("nav.products")}
         <span className="ml-1 text-xs" aria-hidden="true">
           ⌄
         </span>
@@ -74,7 +76,7 @@ export default function NavigationDropdown({
           {/* Header */}
           <div className="mb-2 flex items-center justify-between border-b border-slate-100 px-2 pb-1.5">
             <p className="text-[10px] font-bold tracking-widest text-[#8e699e]">
-              PRODUCT CATEGORIES
+              {t("nav.product_categories")}
             </p>
 
             <a
@@ -82,7 +84,7 @@ export default function NavigationDropdown({
               onClick={close}
               className="text-xs font-semibold text-[#79259c] hover:underline"
             >
-              All Products
+              {t("nav.all_products")}
             </a>
           </div>
 
@@ -144,7 +146,7 @@ export default function NavigationDropdown({
             {/* Loading */}
             {!categories.length && (
               <p className="px-2 py-2 text-sm text-slate-500">
-                Categories are loading…
+                {t("nav.categories_loading")}
               </p>
             )}
           </div>

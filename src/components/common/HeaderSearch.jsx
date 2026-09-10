@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { catalogService } from "../../services/catalogService";
 import { getCategoryRoute } from "../../utils/categoryNavigation";
+import { useLanguage } from "../../i18n/LanguageContext";
 import SearchBar from "./SearchBar";
 
 const matches = (value, query) =>
@@ -10,6 +11,7 @@ export default function HeaderSearch({ categories, onNavigate }) {
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState([]);
   const [focused, setFocused] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     catalogService
@@ -27,7 +29,7 @@ export default function HeaderSearch({ categories, onNavigate }) {
       .map((category) => ({
         key: `category-${category.id || category._id}`,
         label: category.name || category.categoryTitle,
-        meta: "Category",
+        meta: t("products.category"),
         href: `#${getCategoryRoute(category)}`,
       }));
 
@@ -39,7 +41,7 @@ export default function HeaderSearch({ categories, onNavigate }) {
         .map((subTitle) => ({
           key: `subcategory-${category.id || category._id}-${subTitle}`,
           label: subTitle,
-          meta: `${category.name || category.categoryTitle} • Subcategory`,
+          meta: `${category.name || category.categoryTitle} • ${t("products.subcategory")}`,
           href: `#${getCategoryRoute(category, subTitle)}`,
         }))
     );
@@ -49,7 +51,7 @@ export default function HeaderSearch({ categories, onNavigate }) {
       .map((product) => ({
         key: `product-${product.id || product._id}`,
         label: product.name || product.productTitle,
-        meta: product.category || "Product",
+        meta: product.category || t("products.product_singular"),
         href: `#/products/${product.id || product._id}`,
       }));
 
@@ -58,7 +60,7 @@ export default function HeaderSearch({ categories, onNavigate }) {
       ...categoryMatches,
       ...subcategoryMatches,
     ].slice(0, 8);
-  }, [categories, products, query]);
+  }, [categories, products, query, t]);
 
   const close = () => {
     setFocused(false);
@@ -83,7 +85,7 @@ export default function HeaderSearch({ categories, onNavigate }) {
         onSearch={submit}
         onFocus={() => setFocused(true)}
         onBlur={() => setTimeout(() => setFocused(false), 200)}
-        placeholder="Search products"
+        placeholder={t("nav.search_placeholder")}
         className="w-full max-w-none"
       />
 
@@ -114,7 +116,7 @@ export default function HeaderSearch({ categories, onNavigate }) {
             ))
           ) : (
             <p className="px-4 py-4 text-sm text-slate-500">
-              No matching products or categories.
+              {t("products.no_products_title")}
             </p>
           )}
         </div>

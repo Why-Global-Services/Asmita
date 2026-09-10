@@ -4,9 +4,11 @@ import PromotionCard from "../components/promotions/PromotionCard";
 import Loader from "../components/common/Loader";
 import { catalogService } from "../services/catalogService";
 import promotionsHeroImage from "../assets/images/heroes/promotions-capsules.jpeg";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Promotions() {
   const [items, setItems] = useState();
+  const { t } = useLanguage();
 
   useEffect(() => {
     catalogService.getPromotions().then(setItems);
@@ -15,28 +17,28 @@ export default function Promotions() {
   return (
     <>
       <PageHero
-        title="Promotions"
-        subtitle="Health essentials, exceptional value."
+        title={t("promotions.hero_title")}
+        subtitle={t("promotions.hero_sub")}
         image={promotionsHeroImage}
       />
 
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 md:px-8 md:py-12">
         <div className="mb-8 text-center">
           <p className="text-xs font-bold tracking-widest text-[#79259c]">
-            LIMITED TIME SAVINGS
+            {t("promotions.eyebrow")}
           </p>
 
           <h2 className="mt-2 font-serif text-2xl sm:text-3xl">
-            Current Offers
+            {t("promotions.title")}
           </h2>
 
           <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600 sm:text-base">
-            Discover limited-time offers on quality healthcare products.
+            {t("promotions.desc")}
           </p>
         </div>
 
         {!items ? (
-          <Loader />
+          <Loader label={t("promotions.loading")} />
         ) : (
           <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
             {items.map((x) => (

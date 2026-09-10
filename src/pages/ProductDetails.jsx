@@ -6,12 +6,14 @@ import EmptyState from "../components/common/EmptyState";
 import { catalogService } from "../services/catalogService";
 import { useEnquiry } from "../hooks/useEnquiry";
 import productsHeroImage from "../assets/images/heroes/products-tablets.jpeg";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function ProductDetails({ id }) {
   const [product, setProduct] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [activeImgIndex, setActiveImgIndex] = useState(0);
   const { openEnquiry } = useEnquiry();
+  const { t } = useLanguage();
 
   useEffect(() => {
     setLoading(true);
@@ -27,23 +29,23 @@ export default function ProductDetails({ id }) {
       });
   }, [id]);
 
-  if (loading) return <Loader label="Loading product details..." />;
+  if (loading) return <Loader label={t("product_details.loading")} />;
 
   if (!product) {
     return (
       <>
-        <PageHero title="Product Not Found" image={productsHeroImage} />
+        <PageHero title={t("product_details.not_found_title")} image={productsHeroImage} />
         <main className="mx-auto max-w-4xl px-4 py-12 text-center sm:px-6 md:px-8">
           <EmptyState
-            title="Product Not Found"
-            message="The product you are looking for does not exist or may have been removed."
+            title={t("product_details.not_found_title")}
+            message={t("product_details.not_found_msg")}
           />
           <div className="mt-6">
             <a
               href="#/products"
               className="inline-block rounded-lg bg-[#79259c] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[#621d80]"
             >
-              ← Back to Products
+              {t("product_details.back_to_products")}
             </a>
           </div>
         </main>
@@ -67,7 +69,7 @@ export default function ProductDetails({ id }) {
             href="#/products"
             className="inline-flex items-center text-sm font-bold text-[#79259c] transition-colors hover:underline"
           >
-            ← Back to Products
+            {t("product_details.back_to_products")}
           </a>
         </div>
 
@@ -105,7 +107,7 @@ export default function ProductDetails({ id }) {
             )}
           </div>
 
-          {/* Product Details (Price and Rating completely removed per requirement) */}
+          {/* Product Details */}
           <section className="flex flex-col justify-start">
             <div className="flex flex-wrap items-center gap-2">
               {product.category && (
@@ -131,13 +133,13 @@ export default function ProductDetails({ id }) {
             </h1>
 
             <p className="mt-5 text-sm leading-7 text-slate-600 sm:text-base">
-              {product.description || "High quality healthcare product distributed with strict standards of safety and efficacy."}
+              {product.description || t("product_details.default_description")}
             </p>
 
             {product.ingredients && product.ingredients.length > 0 && (
               <div className="mt-5">
                 <h3 className="text-xs font-bold tracking-widest text-[#79259c] uppercase">
-                  Ingredients / Composition
+                  {t("product_details.ingredients")}
                 </h3>
                 <ul className="mt-2 list-inside list-disc text-sm text-slate-600">
                   {product.ingredients.map((ing, i) => (
@@ -150,7 +152,7 @@ export default function ProductDetails({ id }) {
             {product.additionalInformation && (
               <div className="mt-5 rounded-lg bg-[#faf6fc] p-4 text-sm text-slate-700">
                 <b className="block text-xs font-bold tracking-wider text-[#79259c] uppercase mb-1">
-                  Additional Information
+                  {t("product_details.additional_info")}
                 </b>
                 {product.additionalInformation}
               </div>
@@ -158,10 +160,10 @@ export default function ProductDetails({ id }) {
 
             <div className="mt-6 flex items-center gap-4 text-sm font-medium">
               <span className={product.inStock ? "text-emerald-600" : "text-amber-600"}>
-                {product.inStock ? "✓ In stock" : "Check availability"}
+                {product.inStock ? t("product_details.in_stock") : t("product_details.check_availability")}
               </span>
               <span className="text-slate-500">•</span>
-              <span className="text-slate-600">✓ Fast delivery</span>
+              <span className="text-slate-600">{t("product_details.fast_delivery")}</span>
             </div>
 
             <div className="mt-8">
@@ -169,7 +171,7 @@ export default function ProductDetails({ id }) {
                 className="w-full sm:w-auto px-8 py-3 text-base"
                 onClick={() => openEnquiry(product)}
               >
-                Enquiry Now
+                {t("product_details.enquiry_now")}
               </Button>
             </div>
           </section>

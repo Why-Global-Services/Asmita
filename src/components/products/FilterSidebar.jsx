@@ -1,10 +1,13 @@
 import { isSameCategory } from "../../utils/categoryNavigation";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function FilterSidebar({
   categories = [],
   filters = {},
   onChange,
 }) {
+  const { t } = useLanguage();
+
   const handleCategorySelect = (category) => {
     const catLabel = category.name || category.categoryTitle;
     if (isSameCategory(filters.category, category)) {
@@ -40,19 +43,19 @@ export default function FilterSidebar({
   return (
     <aside className="overflow-hidden rounded-xl border border-slate-200 bg-white lg:sticky lg:top-24 lg:h-max shadow-sm">
       <h3 className="rounded-t-xl bg-gradient-to-r from-[#651b89] to-[#932db3] px-5 py-4 font-bold text-white">
-        ⚙ Filters
+        {t("products.filter_title")}
       </h3>
 
       <div className="max-h-[70vh] overflow-y-auto p-4 sm:p-5 lg:max-h-none">
         {/* Category */}
         <div className="flex items-center justify-between">
-          <b className="text-sm text-slate-900">Category</b>
+          <b className="text-sm text-slate-900">{t("products.category")}</b>
           {filters.category && (
             <button
               onClick={() => onChange?.({ ...filters, category: "", subcategory: "" })}
               className="text-xs text-[#79259c] hover:underline font-semibold"
             >
-              Clear
+              {t("products.clear")}
             </button>
           )}
         </div>
@@ -79,7 +82,7 @@ export default function FilterSidebar({
             );
           })}
           {!categories.length && (
-            <p className="py-2 text-xs text-slate-400">Loading categories...</p>
+            <p className="py-2 text-xs text-slate-400">{t("products.loading_categories")}</p>
           )}
         </div>
 
@@ -87,13 +90,13 @@ export default function FilterSidebar({
         {availableSubcategories.length > 0 && (
           <div className="mt-6 border-t border-slate-100 pt-5">
             <div className="flex items-center justify-between">
-              <b className="text-sm text-slate-900">Sub-category</b>
+              <b className="text-sm text-slate-900">{t("products.subcategory")}</b>
               {filters.subcategory && (
                 <button
                   onClick={() => handleSubcategorySelect(filters.subcategory)}
                   className="text-xs text-[#79259c] hover:underline font-semibold"
                 >
-                  Clear
+                  {t("products.clear")}
                 </button>
               )}
             </div>
@@ -127,7 +130,7 @@ export default function FilterSidebar({
             className="mt-6 w-full rounded-md border border-[#79259c] py-2.5 text-sm font-bold text-[#79259c] transition hover:bg-[#faf4fc]"
             onClick={() => onChange?.({})}
           >
-            ↻ Reset All Filters
+            {t("products.reset_filters")}
           </button>
         )}
       </div>

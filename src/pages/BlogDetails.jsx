@@ -6,11 +6,13 @@ import BlogCard from "../components/blog/BlogCard";
 import { catalogService } from "../services/catalogService";
 import { date } from "../utils/formatters";
 import blogHeroImage from "../assets/images/heroes/blog-research.jpeg";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function BlogDetails({ id }) {
   const [blog, setBlog] = useState(null);
   const [recentBlogs, setRecentBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     setLoading(true);
@@ -33,24 +35,24 @@ export default function BlogDetails({ id }) {
   }, [id]);
 
   if (loading) {
-    return <Loader label="Loading blog article..." />;
+    return <Loader label={t("blog_details.loading")} />;
   }
 
   if (!blog) {
     return (
       <>
-        <PageHero title="Blog Post Not Found" image={blogHeroImage} />
+        <PageHero title={t("blog_details.not_found_title")} image={blogHeroImage} />
         <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 md:px-8">
           <EmptyState
-            title="Blog Article Not Found"
-            message="The article you are looking for does not exist or may have been removed."
+            title={t("blog_details.not_found_title")}
+            message={t("blog_details.not_found_msg")}
           />
           <div className="mt-6 text-center">
             <a
               href="#/blog"
               className="inline-block rounded-lg bg-[#79259c] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[#621d80]"
             >
-              ← Return to Blog Listing
+              {t("blog_details.return_listing")}
             </a>
           </div>
         </main>
@@ -58,7 +60,6 @@ export default function BlogDetails({ id }) {
     );
   }
 
-  // Split content by paragraphs if plain text with linebreaks
   const contentParagraphs = blog.content
     ? blog.content.split(/\n\s*\n/).filter(Boolean)
     : [];
@@ -74,7 +75,7 @@ export default function BlogDetails({ id }) {
             href="#/blog"
             className="inline-flex items-center text-sm font-bold text-[#79259c] transition-colors hover:underline"
           >
-            ← Back to Blog
+            {t("blog_details.back_to_blog")}
           </a>
         </div>
 
@@ -141,7 +142,7 @@ export default function BlogDetails({ id }) {
           {/* Sidebar */}
           <aside className="h-max rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
             <h3 className="font-serif text-lg font-bold text-[#79259c]">
-              Recent Articles
+              {t("blog_details.recent_articles")}
             </h3>
 
             <div className="mt-4 flex flex-col divide-y divide-slate-100">
@@ -161,30 +162,30 @@ export default function BlogDetails({ id }) {
                   </a>
                 ))
               ) : (
-                <p className="py-3 text-xs text-slate-500">No other articles found.</p>
+                <p className="py-3 text-xs text-slate-500">{t("blog_details.no_other_articles")}</p>
               )}
             </div>
 
             <div className="mt-8 rounded-lg bg-[#fcf8fd] p-4 text-center">
-              <h4 className="text-sm font-bold text-[#79259c]">Need Assistance?</h4>
+              <h4 className="text-sm font-bold text-[#79259c]">{t("blog_details.need_assistance")}</h4>
               <p className="mt-1 text-xs text-slate-600">
-                Contact our healthcare team for personalized care advice.
+                {t("blog_details.assistance_desc")}
               </p>
               <a
                 href="#/contact"
                 className="mt-3 inline-block rounded bg-[#79259c] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#621d80]"
               >
-                Contact Us
+                {t("blog_details.contact_us")}
               </a>
             </div>
           </aside>
         </div>
 
-        {/* Related Articles Bottom Grid (Mobile/Tablet friendly) */}
+        {/* Related Articles Bottom Grid */}
         {recentBlogs.length > 0 && (
           <section className="mt-14 border-t border-slate-200 pt-10">
             <h2 className="font-serif text-2xl font-bold text-slate-900">
-              More Health Insights
+              {t("blog_details.more_insights")}
             </h2>
             <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {recentBlogs.map((item) => (

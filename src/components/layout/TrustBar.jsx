@@ -1,14 +1,16 @@
-
-
-const benefits = [
-  ["♢", "100% Genuine", "Trusted Quality"],
-  ["✿", "Premium Care", "For Every Need"],
-  ["▣", "Fast Delivery", "Across Angola"],
-  ["♙", "Secure Payment", "Safe & Encrypted"],
-  ["◔", "Customer Support", "We're here to help!"],
-];
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function TrustBar() {
+  const { t } = useLanguage();
+
+  const benefits = [
+    ["♢", t("trustbar.genuine_title"), t("trustbar.genuine_sub")],
+    ["✿", t("trustbar.care_title"), t("trustbar.care_sub")],
+    ["▣", t("trustbar.delivery_title"), t("trustbar.delivery_sub")],
+    ["♙", t("trustbar.payment_title"), t("trustbar.payment_sub")],
+    ["◔", t("trustbar.support_title"), t("trustbar.support_sub")],
+  ];
+
   return (
     <section
       aria-label="Asmita service benefits"

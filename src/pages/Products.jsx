@@ -13,6 +13,7 @@ import {
   productMatchesSubcategory,
 } from "../utils/categoryNavigation";
 import productsHeroImage from "../assets/images/heroes/products-tablets.jpeg";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Products({ query = {} }) {
   const [data, setData] = useState(null);
@@ -21,9 +22,10 @@ export default function Products({ query = {} }) {
     subcategory: query.subcategory || "",
   });
   const [search, setSearch] = useState(query.search || "");
-  const [sort, setSort] = useState("Popularity");
+  const [sortKey, setSortKey] = useState("popularity");
   const [page, setPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { t } = useLanguage();
 
   const listingRef = useRef(null);
 
@@ -59,12 +61,14 @@ export default function Products({ query = {} }) {
         productMatchesSubcategory(product, filters.subcategory)
     );
 
-    return sort.includes("Low")
-      ? a.sort((x, y) => x.price - y.price)
-      : sort.includes("High")
-      ? a.sort((x, y) => y.price - x.price)
-      : a;
-  }, [data, filters, search, sort]);
+    if (sortKey === "price_low") {
+      return a.sort((x, y) => (x.price || 0) - (y.price || 0));
+    }
+    if (sortKey === "price_high") {
+      return a.sort((x, y) => (y.price || 0) - (x.price || 0));
+    }
+    return a;
+  }, [data, filters, search, sortKey]);
 
   const itemsPerPage = 8;
   const totalPages = Math.max(1, Math.ceil(list.length / itemsPerPage));
@@ -111,22 +115,22 @@ export default function Products({ query = {} }) {
   };
 
   const headingText = useMemo(() => {
-    if (!filters.category && !filters.subcategory) return "Healthcare Products";
+    if (!filters.category && !filters.subcategory) return t("products.all_heading");
     if (filters.category && filters.subcategory) {
       return `${filters.category} — ${filters.subcategory}`;
     }
     if (filters.category) {
       return getCategoryHeading(filters.category, data?.categories);
     }
-    return `${filters.subcategory} Products`;
-  }, [filters.category, filters.subcategory, data?.categories]);
+    return t("products.products_heading", { name: filters.subcategory });
+  }, [filters.category, filters.subcategory, data?.categories, t]);
 
   return (
     <>
-      <PageHero title="Products" image={productsHeroImage} />
+      <PageHero title={t("products.hero_title")} image={productsHeroImage} />
 
       {!data ? (
-        <Loader />
+        <Loader label={t("products.loading")} />
       ) : (
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 md:px-8">
           {/* Mobile filter toggle */}
@@ -135,7 +139,7 @@ export default function Products({ query = {} }) {
             onClick={() => setSidebarOpen(!sidebarOpen)}
             aria-expanded={sidebarOpen}
           >
-            {sidebarOpen ? "✕ Hide Filters" : "⚙ Show Filters"}
+            {sidebarOpen ? t("products.hide_filters") : t("products.show_filters")}
           </button>
 
           <div className="grid gap-6 lg:grid-cols-[250px_1fr]">
@@ -158,7 +162,10 @@ export default function Products({ query = {} }) {
 
               <div className="my-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <span className="text-sm text-slate-500">
-                  Showing {list.length} {list.length === 1 ? "product" : "products"}
+                  {t("products.showing_products", {
+                    count: list.length,
+                    item: list.length === 1 ? t("products.product_singular") : t("products.product_plural"),
+                  })}
                 </span>
 
                 <div className="w-full sm:ml-auto sm:w-64 md:w-72">
@@ -168,18 +175,18 @@ export default function Products({ query = {} }) {
                       setSearch(val);
                       setPage(1);
                     }}
-                    placeholder="Search products"
+                    placeholder={t("products.search_placeholder")}
                   />
                 </div>
 
                 <select
                   className="w-full rounded-md border border-slate-200 p-2 text-sm sm:w-auto"
-                  value={sort}
-                  onChange={(event) => setSort(event.target.value)}
+                  value={sortKey}
+                  onChange={(event) => setSortKey(event.target.value)}
                 >
-                  <option>Popularity</option>
-                  <option>Price: Low to High</option>
-                  <option>Price: High to Low</option>
+                  <option value="popularity">{t("products.sort_popularity")}</option>
+                  <option value="price_low">{t("products.sort_price_low")}</option>
+                  <option value="price_high">{t("products.sort_price_high")}</option>
                 </select>
               </div>
 
@@ -194,8 +201,8 @@ export default function Products({ query = {} }) {
                 </div>
               ) : (
                 <EmptyState
-                  title="No products found"
-                  message="Try adjusting your filters or search terms."
+                  title={t("products.no_products_title")}
+                  message={t("products.no_products_msg")}
                 />
               )}
 

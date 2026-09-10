@@ -1,7 +1,9 @@
 import Button from "../common/Button";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function EventCard({ event }) {
   const [day, month] = event.day.split(" ");
+  const { t } = useLanguage();
 
   return (
     <article className="overflow-hidden rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:shadow-md sm:p-2">
@@ -38,7 +40,7 @@ export default function EventCard({ event }) {
             variant="outline"
             className="w-full px-4 py-2 text-sm sm:w-auto sm:px-3 sm:py-1 sm:text-xs"
           >
-            View Details
+            {t("events.view_details")}
           </Button>
         </a>
       </div>

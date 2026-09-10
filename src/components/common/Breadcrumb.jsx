@@ -1,4 +1,7 @@
+import { useLanguage } from "../../i18n/LanguageContext";
+
 export default function Breadcrumb({ items = [], light = false }) {
+  const { t } = useLanguage();
   const textColor = light ? "text-white/85" : "text-slate-600";
   const linkHover = light ? "hover:text-white" : "hover:text-[#79259c]";
   const separatorColor = light ? "text-white/60" : "text-[#a668be]";
@@ -13,7 +16,7 @@ export default function Breadcrumb({ items = [], light = false }) {
         className={`transition-colors ${linkHover}`}
         href="#/"
       >
-        Home
+        {t("common.home_breadcrumb")}
       </a>
 
       {items.map((item) => (

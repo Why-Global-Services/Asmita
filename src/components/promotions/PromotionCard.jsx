@@ -1,10 +1,10 @@
-
-
-
 import Button from "../common/Button";
 import { date } from "../../utils/formatters";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function PromotionCard({ promotion }) {
+  const { t } = useLanguage();
+
   return (
     <article className="relative flex flex-col overflow-hidden rounded-xl border border-[#ead7ef] bg-gradient-to-br from-white to-[#f1dcf5] p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg sm:min-h-[255px] sm:p-7">
       {/* Label & Badge */}
@@ -14,7 +14,7 @@ export default function PromotionCard({ promotion }) {
         </span>
 
         <span className="rounded-full bg-[#79259c] px-3 py-1 text-xs font-semibold text-white">
-          Enquiry
+          {t("enquiry.eyebrow")}
         </span>
       </div>
 
@@ -29,12 +29,12 @@ export default function PromotionCard({ promotion }) {
         </p>
 
         <small className="mt-4 block text-xs font-semibold text-[#79259c]">
-          Expires {date(promotion.expiresAt)}
+          {t("promotions.expires", { date: date(promotion.expiresAt) })}
         </small>
 
         <a href="#/products" className="mt-5 py-4 inline-block sm:mt-auto">
           <Button className="w-full sm:w-auto">
-            Enquiry Now
+            {t("product_details.enquiry_now")}
           </Button>
         </a>
       </div>

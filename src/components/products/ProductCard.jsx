@@ -1,8 +1,10 @@
 import Button from "../common/Button";
 import { useEnquiry } from "../../hooks/useEnquiry";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function ProductCard({ product }) {
   const { openEnquiry } = useEnquiry();
+  const { t } = useLanguage();
   const productId = product.id || product._id;
 
   return (
@@ -36,7 +38,7 @@ export default function ProductCard({ product }) {
           openEnquiry(product);
         }}
       >
-        Enquiry Now
+        {t("product_details.enquiry_now")}
       </Button>
     </article>
   );

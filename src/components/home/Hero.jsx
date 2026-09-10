@@ -1,40 +1,41 @@
-
 import { useEffect, useState } from "react";
 import careReliefBanner from "../../assets/images/banners/care-relief.jpeg";
 import everydayCareBanner from "../../assets/images/banners/everyday-care.jpeg";
 import wellbeingBanner from "../../assets/images/banners/wellbeing.jpeg";
 import hospitalCareBanner from "../../assets/images/banners/hospital-care.jpeg";
 import Button from "../common/Button";
-
-const slides = [
-  {
-    image: careReliefBanner,
-    alt: "Asmita products for pain relief, inflammation and infection care",
-    title: "Essential Care. Better Tomorrow.",
-    copy: "Discover our range of high-quality medical products.",
-  },
-  {
-    image: everydayCareBanner,
-    alt: "Asmita everyday healthcare products for the whole family",
-    title: "Your Health. Our Priority.",
-    copy: "Trusted supplies and dependable care for every stage of life.",
-  },
-  {
-    image: wellbeingBanner,
-    alt: "Asmita health and wellbeing product range",
-    title: "Health and wellbeing in every choice.",
-    copy: "Quality healthcare solutions for the whole family.",
-  },
-  {
-    image: hospitalCareBanner,
-    alt: "Asmita hospital medicines and medical supplies",
-    title: "Quality that saves lives.",
-    copy: "Reliable medical products for healthcare professionals.",
-  },
-];
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function Hero() {
   const [index, setIndex] = useState(0);
+  const { t } = useLanguage();
+
+  const slides = [
+    {
+      image: careReliefBanner,
+      alt: "Asmita products for pain relief, inflammation and infection care",
+      title: t("hero.slide1_title"),
+      copy: t("hero.slide1_copy"),
+    },
+    {
+      image: everydayCareBanner,
+      alt: "Asmita everyday healthcare products for the whole family",
+      title: t("hero.slide2_title"),
+      copy: t("hero.slide2_copy"),
+    },
+    {
+      image: wellbeingBanner,
+      alt: "Asmita health and wellbeing product range",
+      title: t("hero.slide3_title"),
+      copy: t("hero.slide3_copy"),
+    },
+    {
+      image: hospitalCareBanner,
+      alt: "Asmita hospital medicines and medical supplies",
+      title: t("hero.slide4_title"),
+      copy: t("hero.slide4_copy"),
+    },
+  ];
 
   useEffect(() => {
     const autoplay = window.setInterval(
@@ -42,7 +43,7 @@ export default function Hero() {
       3800
     );
     return () => window.clearInterval(autoplay);
-  }, []);
+  }, [slides.length]);
 
   const change = (offset) =>
     setIndex((current) => (current + offset + slides.length) % slides.length);
@@ -66,7 +67,7 @@ export default function Hero() {
       <div className="absolute inset-0">
         <button
           type="button"
-          aria-label="Show previous banner"
+          aria-label={t("hero.prev_banner")}
           className="absolute left-2 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-2xl text-slate-600 shadow-sm transition hover:bg-white sm:left-4 sm:h-10 sm:w-10"
           onClick={() => change(-1)}
         >
@@ -75,7 +76,7 @@ export default function Hero() {
 
         <button
           type="button"
-          aria-label="Show next banner"
+          aria-label={t("hero.next_banner")}
           className="absolute right-2 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-2xl text-slate-600 shadow-sm transition hover:bg-white sm:right-4 sm:h-10 sm:w-10"
           onClick={() => change(1)}
         >
@@ -83,11 +84,11 @@ export default function Hero() {
         </button>
 
         <div className="absolute bottom-3 right-3 flex gap-2 sm:bottom-5 sm:right-5">
-          <a href="#/products" aria-label="Explore products">
-            <Button className="px-3 py-2 text-xs sm:px-4 sm:text-sm">Explore Products</Button>
+          <a href="#/products" aria-label={t("hero.explore_products")}>
+            <Button className="px-3 py-2 text-xs sm:px-4 sm:text-sm">{t("hero.explore_products")}</Button>
           </a>
-          <a href="#/about" aria-label="Learn more about Asmita">
-            <Button variant="outline" className="bg-white/90 px-3 py-2 text-xs sm:px-4 sm:text-sm">Learn More</Button>
+          <a href="#/about" aria-label={t("hero.learn_more")}>
+            <Button variant="outline" className="bg-white/90 px-3 py-2 text-xs sm:px-4 sm:text-sm">{t("hero.learn_more")}</Button>
           </a>
         </div>
 
@@ -96,7 +97,7 @@ export default function Hero() {
             <button
               key={slide.image}
               type="button"
-              aria-label={`Show banner ${slideIndex + 1}`}
+              aria-label={t("hero.banner_slide", { index: slideIndex + 1 })}
               aria-current={slideIndex === index}
               onClick={() => setIndex(slideIndex)}
               className={`h-2 w-2 rounded-full transition sm:h-2.5 sm:w-2.5 ${slideIndex === index ? "bg-white" : "border border-white bg-black/20"}`}

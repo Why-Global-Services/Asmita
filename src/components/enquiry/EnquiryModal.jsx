@@ -2,6 +2,7 @@ import { useState } from "react";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import { catalogService } from "../../services/catalogService";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const initialForm = {
   fullName: "",
@@ -16,6 +17,7 @@ export default function EnquiryModal({ product, onClose }) {
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const { t } = useLanguage();
 
   const adminNumber = import.meta.env.VITE_WHATSAPP_ADMIN_NUMBER;
 
@@ -93,7 +95,7 @@ ${productUrl}`;
       setForm(initialForm);
       onClose();
     } catch (err) {
-      setErrorMsg(err.message || "Failed to submit enquiry. Please try again.");
+      setErrorMsg(err.message || t("enquiry.error_default"));
     } finally {
       setLoading(false);
     }
@@ -103,15 +105,15 @@ ${productUrl}`;
     <Modal open={Boolean(product)} onClose={onClose}>
       <div className="pr-4 sm:pr-7">
         <span className="text-xs font-bold tracking-widest text-[#79259c]">
-          PRODUCT ENQUIRY
+          {t("enquiry.eyebrow")}
         </span>
 
         <h2 className="mt-2 font-serif text-2xl text-slate-900 sm:text-3xl">
-          Enquire about {product.name}
+          {t("enquiry.title", { name: product.name })}
         </h2>
 
         <p className="mt-2 text-sm leading-6 text-slate-600">
-          Share your details and we'll process your enquiry immediately.
+          {t("enquiry.desc")}
         </p>
       </div>
 
@@ -120,7 +122,7 @@ ${productUrl}`;
         onSubmit={submit}
       >
         <Field
-          label="Full Name"
+          label={t("enquiry.name_label")}
           name="fullName"
           value={form.fullName}
           onChange={update}
@@ -128,7 +130,7 @@ ${productUrl}`;
         />
 
         <Field
-          label="Mobile Number"
+          label={t("enquiry.mobile_label")}
           name="mobile"
           type="tel"
           value={form.mobile}
@@ -137,7 +139,7 @@ ${productUrl}`;
         />
 
         <Field
-          label="Email"
+          label={t("enquiry.email_label")}
           name="email"
           type="email"
           value={form.email}
@@ -146,14 +148,14 @@ ${productUrl}`;
         />
 
         <Field
-          label="Company (Optional)"
+          label={t("enquiry.company_label")}
           name="company"
           value={form.company}
           onChange={update}
         />
 
         <Field
-          label="City"
+          label={t("enquiry.city_label")}
           name="city"
           value={form.city}
           onChange={update}
@@ -162,7 +164,7 @@ ${productUrl}`;
 
         <label className="grid gap-2 sm:col-span-2">
           <span className="text-sm font-bold text-slate-700">
-            Message
+            {t("enquiry.message_label")}
           </span>
 
           <textarea
@@ -187,14 +189,13 @@ ${productUrl}`;
             disabled={loading}
             className="w-full sm:w-auto"
           >
-            {loading ? "Submitting..." : "Submit Enquiry"}
+            {loading ? t("enquiry.btn_submitting") : t("enquiry.btn_submit")}
           </Button>
         </div>
       </form>
     </Modal>
   );
 }
-
 
 function Field({ label, ...inputProps }) {
   return (
