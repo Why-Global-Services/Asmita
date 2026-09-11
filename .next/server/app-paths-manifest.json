@@ -1,0 +1,15 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/about/page": "app/about/page.js",
+  "/events/page": "app/events/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/blog/page": "app/blog/page.js",
+  "/new-arrivals/page": "app/new-arrivals/page.js",
+  "/page": "app/page.js",
+  "/promotions/page": "app/promotions/page.js",
+  "/products/page": "app/products/page.js",
+  "/promotion/page": "app/promotion/page.js",
+  "/terms-and-conditions/page": "app/terms-and-conditions/page.js",
+  "/blog/[id]/page": "app/blog/[id]/page.js",
+  "/products/[id]/page": "app/products/[id]/page.js"
+}

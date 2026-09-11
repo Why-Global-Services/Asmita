@@ -1,18 +1,18 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
-import Home from "../pages/Home";
-import Products from "../pages/Products";
-import ProductDetails from "../pages/ProductDetails";
-import Promotions from "../pages/Promotions";
-import NewArrivals from "../pages/NewArrivals";
-import Events from "../pages/Events";
-import Blog from "../pages/Blog";
-import BlogDetails from "../pages/BlogDetails";
-import About from "../pages/About";
-import Contact from "../pages/Contact";
-import TermsConditions from "../pages/TermsConditions";
-import NotFound from "../pages/NotFound";
+import Home from "../_pages/Home";
+import Products from "../_pages/Products";
+import ProductDetails from "../_pages/ProductDetails";
+import Promotions from "../_pages/Promotions";
+import NewArrivals from "../_pages/NewArrivals";
+import Events from "../_pages/Events";
+import Blog from "../_pages/Blog";
+import BlogDetails from "../_pages/BlogDetails";
+import About from "../_pages/About";
+import Contact from "../_pages/Contact";
+import TermsConditions from "../_pages/TermsConditions";
+import NotFound from "../_pages/NotFound";
 
 function pageFor(rawPath) {
   const [path, queryString = ""] = rawPath.split("?");
