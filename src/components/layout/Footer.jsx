@@ -1,6 +1,42 @@
 import AsmitaLogo from "./AsmitaLogo";
 import { useLanguage } from "../../i18n/LanguageContext";
 
+function WarehouseItem({ warehouse, isFirst = false }) {
+  const HeadingTag = isFirst ? "h3" : "h4";
+  const phoneNumbers = warehouse.phone.split(" / ");
+
+  return (
+    <div className={isFirst ? "" : "mt-8"}>
+      <HeadingTag className="text-sm font-semibold uppercase tracking-wide text-white">
+        {warehouse.name}
+      </HeadingTag>
+
+      <div className="mt-2.5 space-y-1 text-xs leading-5 text-white/70">
+        {warehouse.address.map((line, index) => (
+          <p key={index}>{line}</p>
+        ))}
+      </div>
+
+      <div className="mt-3">
+        <p className="text-xs font-semibold leading-5 text-white">
+          Número de contato:
+        </p>
+
+        <div className="mt-1 flex flex-wrap items-center gap-x-1.5 text-xs leading-5 text-white/75">
+          {phoneNumbers.map((phone, idx) => (
+            <span key={phone} className="inline-block whitespace-nowrap">
+              {phone}
+              {idx < phoneNumbers.length - 1 && (
+                <span className="ml-1.5 text-white/50">/</span>
+              )}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Footer() {
   const { t } = useLanguage();
 
@@ -74,36 +110,29 @@ export default function Footer() {
 
   return (
     <footer className="bg-gradient-to-br from-[#24102f] to-[#4d155f] text-white">
-      
       {/* =========================================
           MAIN FOOTER
       ========================================= */}
-
       <div className="mx-auto w-full max-w-[1500px] px-5 py-12 sm:px-8 lg:px-10">
-        
         <div
           className="
             grid
             grid-cols-1
             gap-10
-            text-center
-
+            text-left
             sm:grid-cols-2
-            sm:text-left
-
-            lg:grid-cols-12
-            lg:items-start
-            lg:gap-x-8
-            lg:gap-y-12
+            sm:gap-8
+            lg:grid-cols-3
+            lg:gap-8
+            xl:grid-cols-5
+            xl:gap-8
+            items-start
           "
         >
-
           {/* =========================================
-              COMPANY
+              COLUMN 1 – BRAND
           ========================================= */}
-
-          <div className="lg:col-span-3">
-            
+          <div className="min-w-0">
             <a
               href="#/"
               onClick={scrollToTop}
@@ -112,32 +141,12 @@ export default function Footer() {
               <AsmitaLogo />
             </a>
 
-            <p
-              className="
-                mx-auto
-                mt-5
-                max-w-xs
-                text-sm
-                leading-6
-                text-white/75
-
-                sm:mx-0
-              "
-            >
+            <p className="mt-5 max-w-xs text-sm leading-6 text-white/75">
               {t("footer.tagline")}
             </p>
 
             {/* Social Icons */}
-            <div
-              className="
-                mt-5
-                flex
-                justify-center
-                gap-5
-                text-xl
-                sm:justify-start
-              "
-            >
+            <div className="mt-5 flex items-center gap-5 text-xl">
               <span>◉</span>
               <span>♥</span>
               <span>◎</span>
@@ -145,30 +154,21 @@ export default function Footer() {
             </div>
           </div>
 
-
           {/* =========================================
-              QUICK LINKS
+              COLUMN 2 – QUICK LINKS
           ========================================= */}
-
-          <div className="lg:col-span-2">
-            
-            <h3 className="text-sm font-semibold">
+          <div className="min-w-0">
+            <h3 className="text-sm font-semibold tracking-wide text-white">
               {t("footer.quick_links")}
             </h3>
 
-            <nav className="mt-5 grid gap-3">
+            <nav className="mt-5 flex flex-col gap-3">
               {links.map(([name, path]) => (
                 <a
                   key={path}
                   href={`#${path}`}
                   onClick={scrollToTop}
-                  className="
-                    text-sm
-                    text-white/75
-                    transition
-                    duration-200
-                    hover:text-white
-                  "
+                  className="text-sm text-white/75 transition duration-200 hover:text-white"
                 >
                   {name}
                 </a>
@@ -176,189 +176,74 @@ export default function Footer() {
             </nav>
           </div>
 
-
           {/* =========================================
-              CUSTOMER SERVICE
+              COLUMN 3 – CUSTOMER SERVICE
           ========================================= */}
-
-          <div className="lg:col-span-2">
-            
-            <h3 className="text-sm font-semibold">
+          <div className="min-w-0">
+            <h3 className="text-sm font-semibold tracking-wide text-white">
               {t("footer.customer_service")}
             </h3>
 
-            <nav className="mt-5 grid gap-3">
+            <nav className="mt-5 flex flex-col gap-3">
               {serviceLinks.map(([name, path]) => (
                 <a
                   key={name}
                   href={`#${path}`}
                   onClick={scrollToTop}
-                  className="
-                    text-sm
-                    text-white/75
-                    transition
-                    duration-200
-                    hover:text-white
-                  "
+                  className="text-sm text-white/75 transition duration-200 hover:text-white"
                 >
                   {name}
                 </a>
               ))}
             </nav>
 
-
-            {/* Contact */}
+            {/* Contact Us */}
             <div className="mt-8">
-              
-              <h3 className="text-sm font-semibold">
+              <h4 className="text-sm font-semibold tracking-wide text-white">
                 {t("footer.contact_us")}
-              </h3>
+              </h4>
 
-              <div className="mt-4 grid gap-3 text-sm text-white/75">
-                
+              <div className="mt-4 flex flex-col gap-3 text-sm text-white/75">
                 <p className="flex items-start gap-2">
-                  <span>☎</span>
-                  <span>{t("footer.phone")}</span>
-                </p>
-
-                <p className="flex items-start gap-2 break-all">
-                  <span>✉</span>
-                  <span>{t("footer.email")}</span>
+                  <span className="shrink-0">☎</span>
+                  <span className="whitespace-nowrap">{t("footer.phone")}</span>
                 </p>
 
                 <p className="flex items-start gap-2">
-                  <span>⌖</span>
+                  <span className="shrink-0">✉</span>
+                  <span className="break-words [overflow-wrap:anywhere]">{t("footer.email")}</span>
+                </p>
+
+                <p className="flex items-start gap-2">
+                  <span className="shrink-0">⌖</span>
                   <span>{t("footer.location")}</span>
                 </p>
-
               </div>
             </div>
           </div>
 
-
           {/* =========================================
-              WAREHOUSE SECTION
+              COLUMN 4 – WAREHOUSE 1 & 2
           ========================================= */}
-
-          <div className="lg:col-span-5">
-
-            {/* Warehouse Heading */}
-            <h3
-              className="
-                text-left
-                text-sm
-                font-semibold
-                uppercase
-                tracking-wide
-              "
-            >
-              ENDEREÇO DE ARMAZENS
-            </h3>
-
-
-            {/* Warehouse Grid */}
-            <div
-              className="
-                mt-5
-                grid
-                grid-cols-1
-                gap-8
-                text-left
-
-                sm:grid-cols-2
-
-                lg:grid-cols-2
-                xl:grid-cols-4
-                xl:gap-6
-              "
-            >
-              
-              {warehouses.map((warehouse) => (
-                <div
-                  key={warehouse.name}
-                  className="
-                    min-w-0
-                    text-left
-                  "
-                >
-
-                  {/* Warehouse Name */}
-                  <h4
-                    className="
-                      min-h-[40px]
-                      text-xs
-                      font-bold
-                      leading-5
-                      tracking-wide
-                      text-white
-                    "
-                  >
-                    {warehouse.name}
-                  </h4>
-
-
-                  {/* Address */}
-                  <div
-                    className="
-                      mt-2
-                      space-y-0.5
-                      text-xs
-                      leading-5
-                      text-white/70
-                    "
-                  >
-                    {warehouse.address.map((line, index) => (
-                      <p key={index}>
-                        {line}
-                      </p>
-                    ))}
-                  </div>
-
-
-                  {/* Phone */}
-                  <div className="mt-3">
-                    
-                    <p
-                      className="
-                        text-xs
-                        font-semibold
-                        leading-5
-                        text-white
-                      "
-                    >
-                      Número de contato:
-                    </p>
-
-                    <p
-                      className="
-                        mt-0.5
-                        break-words
-                        text-xs
-                        leading-5
-                        text-white/75
-                      "
-                    >
-                      {warehouse.phone}
-                    </p>
-
-                  </div>
-
-                </div>
-              ))}
-
-            </div>
+          <div className="min-w-0">
+            <WarehouseItem warehouse={warehouses[0]} isFirst={true} />
+            <WarehouseItem warehouse={warehouses[1]} isFirst={false} />
           </div>
 
+          {/* =========================================
+              COLUMN 5 – WAREHOUSE 3 & 4
+          ========================================= */}
+          <div className="min-w-0">
+            <WarehouseItem warehouse={warehouses[2]} isFirst={true} />
+            <WarehouseItem warehouse={warehouses[3]} isFirst={false} />
+          </div>
         </div>
       </div>
-
 
       {/* =========================================
           BOTTOM FOOTER
       ========================================= */}
-
       <div className="border-t border-white/15">
-        
         <div
           className="
             mx-auto
@@ -374,27 +259,16 @@ export default function Footer() {
             text-center
             text-xs
             text-white/60
-
-            sm:px-8
-
             sm:flex-row
             sm:text-left
-
+            sm:px-8
             lg:px-10
           "
         >
-          
-          <p>
-            {t("footer.rights_reserved")}
-          </p>
-
-          <p>
-            {t("footer.designed_with")}
-          </p>
-
+          <p>{t("footer.rights_reserved")}</p>
+          <p>{t("footer.designed_with")}</p>
         </div>
       </div>
-
     </footer>
   );
 }
