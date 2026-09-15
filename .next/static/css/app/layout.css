@@ -1,3 +1,76 @@
+/*!**********************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[3]!./components/layout/Preloader.module.css ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************/
+.Preloader_preloader__ruiwM {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  pointer-events: all;
+}
+
+.Preloader_glow___CXVD {
+  position: absolute;
+  height: 12rem;
+  width: 12rem;
+  border-radius: 9999px;
+  background-color: rgba(246, 230, 251, 0.6);
+  filter: blur(48px);
+  pointer-events: none;
+}
+
+.Preloader_centerContainer__I_YZ3 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Preloader_logoWrapper__Esikk {
+  position: relative;
+  width: 7rem;
+  height: auto;
+}
+
+@media (min-width: 640px) {
+  .Preloader_logoWrapper__Esikk {
+    width: 8rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .Preloader_logoWrapper__Esikk {
+    width: 9rem;
+  }
+}
+
+.Preloader_logoSvg__lqAIE {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
+}
+
+.Preloader_progressBarTrack__JceG5 {
+  margin-top: 1.25rem;
+  height: 0.125rem;
+  width: 6rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background-color: #f1f5f9;
+}
+
+.Preloader_progressBarFill__huuCt {
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(to right, #79259c, #b042dc);
+  border-radius: 9999px;
+}
+
 /*!***************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[3]!./styles/styles.css ***!
   \***************************************************************************************************************************************************************************************************************************************************************/
@@ -335,9 +408,6 @@
   .z-\[2\] {
     z-index: 2;
   }
-  .z-\[99999\] {
-    z-index: 99999;
-  }
   .mx-auto {
     margin-inline: auto;
   }
@@ -461,9 +531,6 @@
   .aspect-square {
     aspect-ratio: 1 / 1;
   }
-  .h-0\.5 {
-    height: calc(var(--spacing) * 0.5);
-  }
   .h-2 {
     height: calc(var(--spacing) * 2);
   }
@@ -575,17 +642,8 @@
   .w-20 {
     width: calc(var(--spacing) * 20);
   }
-  .w-24 {
-    width: calc(var(--spacing) * 24);
-  }
-  .w-28 {
-    width: calc(var(--spacing) * 28);
-  }
   .w-44 {
     width: calc(var(--spacing) * 44);
-  }
-  .w-48 {
-    width: calc(var(--spacing) * 48);
   }
   .w-\[120px\] {
     width: 120px;
@@ -917,9 +975,6 @@
   .bg-\[\#f5e8f8\] {
     background-color: #f5e8f8;
   }
-  .bg-\[\#f6e6fb\]\/60 {
-    background-color: color-mix(in oklab, #f6e6fb 60%, transparent);
-  }
   .bg-\[\#f6eefa\] {
     background-color: #f6eefa;
   }
@@ -1030,10 +1085,6 @@
     --tw-gradient-from: #24102f;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
-  .from-\[\#79259c\] {
-    --tw-gradient-from: #79259c;
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
   .from-\[\#351044\] {
     --tw-gradient-from: #351044;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
@@ -1086,10 +1137,6 @@
   }
   .to-\[\#8625a7\] {
     --tw-gradient-to: #8625a7;
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-  .to-\[\#b042dc\] {
-    --tw-gradient-to: #b042dc;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
   .to-\[\#d7c4df\] {
@@ -1569,10 +1616,6 @@
     --tw-blur: blur(8px);
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
-  .blur-3xl {
-    --tw-blur: blur(var(--blur-3xl));
-    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
-  }
   .drop-shadow {
     --tw-drop-shadow-size: drop-shadow(0 1px 2px var(--tw-drop-shadow-color, rgb(0 0 0 / 0.1))) drop-shadow(0 1px 1px var(--tw-drop-shadow-color, rgb(0 0 0 / 0.06)));
     --tw-drop-shadow: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow( 0 1px 1px rgb(0 0 0 / 0.06));
@@ -1900,9 +1943,6 @@
     .sm\:w-24 {
       width: calc(var(--spacing) * 24);
     }
-    .sm\:w-32 {
-      width: calc(var(--spacing) * 32);
-    }
     .sm\:w-64 {
       width: calc(var(--spacing) * 64);
     }
@@ -2094,9 +2134,6 @@
     }
     .md\:min-h-\[290px\] {
       min-height: 290px;
-    }
-    .md\:w-36 {
-      width: calc(var(--spacing) * 36);
     }
     .md\:w-72 {
       width: calc(var(--spacing) * 72);

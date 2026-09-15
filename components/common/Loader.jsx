@@ -5,14 +5,21 @@ import { useLanguage } from "../../i18n/LanguageContext";
 
 const logo = "/images/asmita-logo-transparent.png";
 
+// Exact non-overlapping clip paths for each individual leaf and the person figure.
+// Ensures each leaf is 100% intact and isolated with zero cross-clipping, splits, or detached fragments.
 const LEAF_CLIPS = [
-  "polygon(23.5% 2%, 30.5% 2%, 30.5% 21%, 23.5% 21%)",
-  "polygon(16% 16%, 27% 16%, 27% 31%, 16% 31%)",
-  "polygon(24.5% 16%, 36% 16%, 36% 32%, 24.5% 32%)",
+  // Leaf 1 - top center (x: 173-209, y: 14-82)
+  "polygon(24% 0%, 30% 0%, 30% 19.2%, 24% 19.2%)",
+
+  // Leaf 2 - left (x: 125-187, y: 70-126)
+  "polygon(10% 12%, 24% 12%, 24% 19.2%, 26.4% 19.2%, 26.4% 30.1%, 10% 30.1%)",
+
+  // Leaf 3 - right (x: 188-247, y: 73-126)
+  "polygon(26.4% 19.2%, 30% 19.2%, 30% 12%, 38% 12%, 38% 30.1%, 26.4% 30.1%)",
 ];
 
-const PERSON_CLIP =
-  "polygon(0% 27%, 27% 27%, 27% 89%, 0% 89%)";
+// Exact clip path for the purple person figure (x: 0% to 26.5% strictly excluding letter "A" & text, y: 30.2% to 88% strictly below leaves)
+const PERSON_CLIP = "polygon(0% 30.2%, 26.5% 30.2%, 26.5% 88%, 0% 88%)";
 
 export default function Loader({ label }) {
   const { t } = useLanguage();

@@ -1,0 +1,69 @@
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  pointer-events: all;
+}
+
+.glow {
+  position: absolute;
+  height: 12rem;
+  width: 12rem;
+  border-radius: 9999px;
+  background-color: rgba(246, 230, 251, 0.6);
+  filter: blur(48px);
+  pointer-events: none;
+}
+
+.centerContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logoWrapper {
+  position: relative;
+  width: 7rem;
+  height: auto;
+}
+
+@media (min-width: 640px) {
+  .logoWrapper {
+    width: 8rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .logoWrapper {
+    width: 9rem;
+  }
+}
+
+.logoSvg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
+}
+
+.progressBarTrack {
+  margin-top: 1.25rem;
+  height: 0.125rem;
+  width: 6rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background-color: #f1f5f9;
+}
+
+.progressBarFill {
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(to right, #79259c, #b042dc);
+  border-radius: 9999px;
+}

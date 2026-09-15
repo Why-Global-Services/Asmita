@@ -1,4 +1,4 @@
-// File: C:\Users\WELCOME\Desktop\asmita frontend\app\layout.jsx
+// File: C:\Users\hari\OneDrive\Desktop\asmita main\asmita frontend\app\layout.jsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

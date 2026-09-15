@@ -2,27 +2,26 @@
 
 import { useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import styles from "./Preloader.module.css";
 
 const logo = "/images/asmita-logo-transparent.png";
 
-// Rectangular clip-paths that fully encompass each leaf's actual pixel area
-// (with generous padding so no part of the leaf is clipped at any rotation/scale).
-// The actual visible leaf shape is determined by the PNG alpha channel, not this clip.
+// Exact non-overlapping clip paths for each individual leaf and the person figure.
+// Ensures each leaf is 100% intact and isolated with zero cross-clipping, splits, or detached fragments.
 const LEAF_CLIPS = [
-  // Leaf 1 - top center (actual pixel bounds x:173-209, y:14-82 in 710x432 image)
-  "polygon(22% 1%, 32% 1%, 32% 22%, 22% 22%)",
+  // Leaf 1 - top center (x: 173-209, y: 14-82)
+  "polygon(24% 0%, 30% 0%, 30% 19.2%, 24% 19.2%)",
 
-  // Leaf 2 - left (actual pixel bounds x:125-187, y:73-119 in 710x432 image)
-  "polygon(15% 14%, 28% 14%, 28% 31%, 15% 31%)",
+  // Leaf 2 - left (x: 125-187, y: 70-126)
+  "polygon(10% 12%, 24% 12%, 24% 19.2%, 26.4% 19.2%, 26.4% 30.1%, 10% 30.1%)",
 
-  // Leaf 3 - right (actual pixel bounds x:187-247, y:73-126 in 710x432 image)
-  "polygon(25% 14%, 37% 14%, 37% 32%, 25% 32%)",
+  // Leaf 3 - right (x: 188-247, y: 73-126)
+  "polygon(26.4% 19.2%, 30% 19.2%, 30% 12%, 38% 12%, 38% 30.1%, 26.4% 30.1%)",
 ];
 
-// Exact clip path for the purple person figure
-// Excludes letter "A" and all text
+// Exact clip path for the purple person figure (x: 0% to 26.5% strictly excluding letter "A" & text, y: 30.2% to 88% strictly below leaves)
 const PERSON_CLIP =
-  "polygon(0% 27%, 27% 27%, 27% 89%, 0% 89%)";
+  "polygon(0% 30.2%, 26.5% 30.2%, 26.5% 88%, 0% 88%)";
 
 export default function Preloader({ visible }) {
   const reduced = useReducedMotion();
@@ -58,28 +57,27 @@ export default function Preloader({ visible }) {
               ease: [0.4, 0, 0.2, 1],
             },
           }}
-          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-white"
-          style={{ pointerEvents: "all" }}
+          className={styles.preloader}
           aria-live="polite"
           aria-busy="true"
         >
           {/* Small subtle background glow */}
           <div
-            className="absolute h-48 w-48 rounded-full bg-[#f6e6fb]/60 blur-3xl pointer-events-none"
+            className={styles.glow}
             aria-hidden="true"
           />
 
-          <div className="relative flex flex-col items-center">
+          <div className={styles.centerContainer}>
             {/* =========================================
                 LOGO SYMBOL
                 Person + Leaves only
                 No logo text
             ========================================= */}
 
-            <div className="relative w-28 sm:w-32 md:w-36 h-auto">
+            <div className={styles.logoWrapper}>
               <svg
                 viewBox="0 0 260 380"
-                className="w-full h-auto overflow-visible drop-shadow-sm"
+                className={styles.logoSvg}
                 role="img"
                 aria-label="Asmita Logo Icon"
               >
@@ -326,7 +324,7 @@ export default function Preloader({ visible }) {
                 SMALL PROGRESS BAR
             ========================================= */}
 
-            <div className="mt-5 h-0.5 w-24 overflow-hidden rounded-full bg-slate-100">
+            <div className={styles.progressBarTrack}>
               <motion.div
                 initial={{ x: "-100%" }}
                 animate={{ x: "0%" }}
@@ -334,7 +332,7 @@ export default function Preloader({ visible }) {
                   duration: 1.8,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="h-full w-full bg-gradient-to-r from-[#79259c] to-[#b042dc] rounded-full"
+                className={styles.progressBarFill}
               />
             </div>
           </div>
