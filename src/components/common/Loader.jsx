@@ -2,10 +2,18 @@ import { motion, useReducedMotion } from "framer-motion";
 import logo from "../../assets/images/asmita-logo-transparent.png";
 import { useLanguage } from "../../i18n/LanguageContext";
 
+// Rectangular clip-paths that fully encompass each leaf's actual pixel area
+// (with generous padding so no part of the leaf is clipped at any rotation/scale).
+// The actual visible leaf shape is determined by the PNG alpha channel, not this clip.
 const LEAF_CLIPS = [
-  "polygon(26.7% 3.2%, 24.2% 10%, 24.6% 15.8%, 26.7% 19.3%, 28.9% 15.3%, 29.3% 10.2%)",
-  "polygon(17.5% 16.9%, 21% 17.6%, 24.5% 20.4%, 26.1% 27.1%, 22.2% 26.9%, 19.4% 23.9%)",
-  "polygon(27.5% 22.7%, 30.6% 18.1%, 34.4% 16.9%, 33.8% 22.7%, 31.1% 27.1%, 26.9% 29.5%)",
+  // Leaf 1 - top center (actual pixel bounds x:173-209, y:14-82 in 710x432 image)
+  "polygon(22% 1%, 32% 1%, 32% 22%, 22% 22%)",
+
+  // Leaf 2 - left (actual pixel bounds x:125-187, y:73-119 in 710x432 image)
+  "polygon(15% 14%, 28% 14%, 28% 31%, 15% 31%)",
+
+  // Leaf 3 - right (actual pixel bounds x:187-247, y:73-126 in 710x432 image)
+  "polygon(25% 14%, 37% 14%, 37% 32%, 25% 32%)",
 ];
 
 const PERSON_CLIP = "polygon(0% 27%, 27% 27%, 27% 89%, 0% 89%)";
