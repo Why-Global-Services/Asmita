@@ -158,20 +158,17 @@ export const getSubCategories = async (params) => {
 };
 
 export const createSubCategory = async (data) => {
-  const res = await apiInstance.post(`/createSubCategory`, data, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const isFormData = data instanceof FormData;
+  const config = isFormData ? {} : { headers: { "Content-Type": "application/json" } };
+  const res = await apiInstance.post(`/createSubCategory`, data, config);
   return res;
 };
 
 export const editSubCategory = async (id, data) => {
   // Auto-detect content type: FormData for file uploads, JSON for plain objects
   const isFormData = data instanceof FormData;
-  const res = await apiInstance.put(`/updatesubCategory/${id}`, data, {
-    headers: {
-      "Content-Type": isFormData ? "multipart/form-data" : "application/json",
-    },
-  });
+  const config = isFormData ? {} : { headers: { "Content-Type": "application/json" } };
+  const res = await apiInstance.put(`/updatesubCategory/${id}`, data, config);
   return res;
 };
 

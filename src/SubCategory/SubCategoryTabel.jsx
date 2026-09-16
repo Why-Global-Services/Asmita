@@ -117,20 +117,49 @@ const SubCategoryTable = () => {
     {
       name: 'S.No',
       cell: (row, index) => (currentPage - 1) * rowsPerPage + index + 1,
-      width: '10%',
+      width: '8%',
       sortable: false,
+    },
+    {
+      name: 'Image',
+      cell: (row) => {
+        const imageUrl = Array.isArray(row.subCategoryImage)
+          ? row.subCategoryImage[0]
+          : row.subCategoryImage;
+
+        return (
+          <div className="flex items-center justify-center">
+            {imageUrl ? (
+              <img
+                src={imageUrl}
+                alt={row.subCategoryTitle || 'Subcategory'}
+                className="w-8 h-8 object-contain rounded border border-gray-200 p-0.5 bg-gray-50"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://placehold.co/200x200?text=No+Image';
+                }}
+              />
+            ) : (
+              <div className="w-8 h-8 bg-gray-100 flex items-center justify-center rounded border border-gray-200 text-xs text-gray-400">
+                -
+              </div>
+            )}
+          </div>
+        );
+      },
+      width: '12%',
     },
     {
       name: 'Category Name',
       selector: (row) => row.categoryTitle || '-',
       sortable: true,
-      width: '20%',
+      width: '22%',
     },
     {
       name: 'SubCategory Name',
       selector: (row) => row.subCategoryTitle || '-',
       sortable: true,
-      width: '30%',
+      width: '26%',
     },
     {
       name: 'Status',
@@ -146,7 +175,7 @@ const SubCategoryTable = () => {
           />
         </div>
       ),
-      width: '20%',
+      width: '14%',
     },
     {
       name: 'Actions',
@@ -181,7 +210,7 @@ const SubCategoryTable = () => {
           </Tooltip>
         </div>
       ),
-      width: '20%',
+      width: '18%',
     },
   ];
 
@@ -427,6 +456,22 @@ const SubCategoryTable = () => {
           {subCategoryToView && (
             <div className="space-y-4">
               <div className="flex flex-col items-center mb-4">
+                {(() => {
+                  const viewImage = Array.isArray(subCategoryToView.subCategoryImage)
+                    ? subCategoryToView.subCategoryImage[0]
+                    : subCategoryToView.subCategoryImage;
+                  return viewImage ? (
+                    <img
+                      src={viewImage}
+                      alt={subCategoryToView.subCategoryTitle || 'SubCategory'}
+                      className="w-40 h-40 object-contain rounded-lg border border-gray-200 p-2 bg-gray-50 mb-3"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://placehold.co/200x200?text=No+Image';
+                      }}
+                    />
+                  ) : null;
+                })()}
                 <h3 className="text-xl font-semibold">{subCategoryToView.subCategoryTitle}</h3>
               </div>
 
