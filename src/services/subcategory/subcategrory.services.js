@@ -7,8 +7,12 @@ const isAdminRole = (role) => {
   return r === "superadmin" || r === "admin";
 };
 
+// Escape special regex characters so user input is treated as a literal string
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 const createSubCategory = async (req) => {
-  const { subCategoryTitle, categoryId, categoryTitle, status } = req.body;
+  const subCategoryTitle = req.body?.subCategoryTitle?.trim();
+  const { categoryId, categoryTitle, status } = req.body;
 
   // Check user role
   if (!isAdminRole(req.user?.role)) {
@@ -28,7 +32,7 @@ const createSubCategory = async (req) => {
 
   // Check if subcategory already exists (case-insensitive)
   const existing = await subCategory.findOne({
-    subCategoryTitle: { $regex: new RegExp("^" + subCategoryTitle + "$", "i") },
+    subCategoryTitle: { $regex: new RegExp("^" + escapeRegex(subCategoryTitle) + "$", "i") },
   });
 
   if (existing) {
@@ -40,12 +44,17 @@ const createSubCategory = async (req) => {
     ? await uploadToCloud(req.file, "subcategories")
     : "";
 
+  let statusValue = true;
+  if (status !== undefined && status !== null && status !== "") {
+    statusValue = status === true || status === "true";
+  }
+
   const createdSubCategory = await subCategory.create({
     categoryId,
     categoryTitle,
     subCategoryTitle,
     subCategoryImage,
-    status: status !== undefined ? status : true,
+    status: statusValue,
   });
 
   return {
@@ -54,6 +63,7 @@ const createSubCategory = async (req) => {
     data: createdSubCategory,
   };
 };
+
 const getSubCategory = async (req) => {
   if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
@@ -69,42 +79,69 @@ const getSubCategory = async (req) => {
 };
 
 const updateSubCategory = async (req) => {
-  const { body } = req;
   const id = req.params.id;
 
   if (!isAdminRole(req.user?.role)) {
     throw new ApiError(403, "Unauthorized");
   }
 
-  const subCategoryTitle = req.body?.subCategoryTitle?.trim();
+  // Find the existing document first
   const existingSubCategory = await subCategory.findById(id);
-
   if (!existingSubCategory) {
     throw new ApiError(404, "Subcategory not found");
   }
 
+  // Extract and sanitize fields from request body
+  const subCategoryTitle = req.body?.subCategoryTitle?.trim();
+  const categoryId      = req.body?.categoryId      || existingSubCategory.categoryId;
+  const categoryTitle   = req.body?.categoryTitle   || existingSubCategory.categoryTitle;
+
+  // Parse status: FormData always sends strings ("true"/"false"), convert to Boolean
+  let statusValue = existingSubCategory.status; // default: keep existing
+  if (req.body?.status !== undefined && req.body?.status !== null && req.body?.status !== "") {
+    statusValue = req.body.status === true || req.body.status === "true";
+  }
+
+  // Duplicate-title check: case-insensitive, but ONLY look at OTHER documents.
+  // We compare the stored title of the found duplicate against the current document's
+  // _id to guard against false positives caused by case-only changes on the SAME document.
   if (subCategoryTitle) {
     const existing = await subCategory.findOne({
       _id: { $ne: id },
       subCategoryTitle: {
-        $regex: new RegExp("^" + subCategoryTitle + "$", "i"),
+        $regex: new RegExp("^" + escapeRegex(subCategoryTitle) + "$", "i"),
       },
     });
 
-    if (existing) {
+    // If a duplicate was found and it is truly a DIFFERENT document, reject the update
+    if (existing && String(existing._id) !== String(id)) {
       throw new ApiError(400, "Sub Category already exists (duplicate)");
     }
   }
 
-  const updateData = { ...body };
+  // Build the update payload explicitly (do NOT spread raw req.body to avoid stale/unexpected fields)
+  const updatePayload = {
+    categoryId,
+    categoryTitle,
+    subCategoryTitle: subCategoryTitle || existingSubCategory.subCategoryTitle,
+    status: statusValue,
+  };
+
+  // Handle image upload only when a new file is provided
   if (req.file) {
-    updateData.subCategoryImage = await uploadToCloud(req.file, "subcategories");
+    updatePayload.subCategoryImage = await uploadToCloud(req.file, "subcategories");
   }
 
-  const updatedSubCategory = await subCategory.findByIdAndUpdate(id, updateData, {
-    new: true,
-    runValidators: true,
-  });
+  // Use explicit $set so MongoDB applies only the changed fields
+  const updatedSubCategory = await subCategory.findByIdAndUpdate(
+    id,
+    { $set: updatePayload },
+    { new: true }   // runValidators removed: status was already parsed to Boolean above
+  );
+
+  if (!updatedSubCategory) {
+    throw new ApiError(404, "Subcategory not found or could not be updated");
+  }
 
   return {
     success: true,
