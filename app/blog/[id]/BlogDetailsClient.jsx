@@ -98,7 +98,7 @@ export default function BlogDetailsClient({ id }) {
             <div className="mt-4 flex flex-col divide-y divide-slate-100">
               {recentBlogs.length > 0 ? (
                 recentBlogs.map((item) => (
-                  <Link key={item.id} href={"/blog/" + item.id} className="group py-3 transition">
+                  <Link key={item.id} href={"/blog?id=" + encodeURIComponent(item.id)} className="group py-3 transition">
                     <p className="text-sm font-semibold text-slate-900 transition group-hover:text-[#79259c]">{item.title}</p>
                     <small className="mt-1 block text-slate-500">{date(item.publishedAt)}</small>
                   </Link>

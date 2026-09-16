@@ -10,6 +10,7 @@ import SearchBar from "@/components/common/SearchBar";
 import Pagination from "@/components/common/Pagination";
 import Loader from "@/components/common/Loader";
 import EmptyState from "@/components/common/EmptyState";
+import ProductDetailsClient from "@/app/products/[id]/ProductDetailsClient";
 import { catalogService } from "@/services/catalogService";
 import { getCategoryHeading, productMatchesCategory, productMatchesSubcategory } from "@/utils/categoryNavigation";
 import { useLanguage } from "@/i18n/LanguageContext";
@@ -18,6 +19,7 @@ function ProductsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { t } = useLanguage();
+  const productId = searchParams.get("id");
   const [data, setData] = useState(null);
   const [filters, setFilters] = useState({
     category: searchParams.get("category") || "",
@@ -88,6 +90,10 @@ function ProductsContent() {
     if (filters.category) return getCategoryHeading(filters.category, data && data.categories);
     return t("products.products_heading", { name: filters.subcategory });
   }, [filters.category, filters.subcategory, data, t]);
+
+  if (productId) {
+    return <ProductDetailsClient id={productId} />;
+  }
 
   return (
     <>

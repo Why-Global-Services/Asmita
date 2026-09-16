@@ -17,12 +17,11 @@ import NotFound from "../_pages/NotFound";
 function pageFor(rawPath) {
   const [path, queryString = ""] = rawPath.split("?");
   const query = Object.fromEntries(new URLSearchParams(queryString));
-  const detail = path.match(/^\/products\/([^/]+)$/);
+  const detailId = query.id;
 
-  if (detail) return <ProductDetails key={detail[1]} id={detail[1]} />;
+  if (path === "/products" && detailId) return <ProductDetails key={detailId} id={detailId} />;
 
-  const blogDetail = path.match(/^\/blog\/([^/]+)$/);
-  if (blogDetail) return <BlogDetails key={blogDetail[1]} id={blogDetail[1]} />;
+  if (path === "/blog" && detailId) return <BlogDetails key={detailId} id={detailId} />;
 
   return (
     {

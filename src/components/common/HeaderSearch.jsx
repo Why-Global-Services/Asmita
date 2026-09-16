@@ -52,7 +52,7 @@ export default function HeaderSearch({ categories, onNavigate }) {
         key: `product-${product.id || product._id}`,
         label: product.name || product.productTitle,
         meta: product.category || t("products.product_singular"),
-        href: `#/products/${product.id || product._id}`,
+        href: `#/products?id=${encodeURIComponent(product.id || product._id)}`,
       }));
 
     return [

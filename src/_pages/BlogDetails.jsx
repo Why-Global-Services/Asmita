@@ -150,7 +150,7 @@ export default function BlogDetails({ id }) {
                 recentBlogs.map((item) => (
                   <a
                     key={item.id}
-                    href={`#/blog/${item.id}`}
+                    href={`#/blog?id=${encodeURIComponent(item.id)}`}
                     className="group py-3 transition"
                   >
                     <p className="text-sm font-semibold text-slate-900 transition group-hover:text-[#79259c]">

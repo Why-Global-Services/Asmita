@@ -60,7 +60,7 @@ export default function Blog() {
 
                   <a
                     className="mt-5 inline-block font-bold text-[#79259c] hover:underline"
-                    href={`#/blog/${items[0].id}`}
+                    href={`#/blog?id=${encodeURIComponent(items[0].id)}`}
                   >
                     {t("blog.read_featured")}
                   </a>

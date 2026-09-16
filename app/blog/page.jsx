@@ -1,18 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import PageHero from "@/components/layout/PageHero";
 import BlogCard from "@/components/blog/BlogCard";
 import Loader from "@/components/common/Loader";
+import BlogDetailsClient from "@/app/blog/[id]/BlogDetailsClient";
 import { catalogService } from "@/services/catalogService";
 import { useLanguage } from "@/i18n/LanguageContext";
 
-export default function BlogPage() {
+function BlogContent() {
+  const searchParams = useSearchParams();
+  const blogId = searchParams.get("id");
   const [items, setItems] = useState();
   const { t } = useLanguage();
 
   useEffect(() => { catalogService.getBlogs().then(setItems); }, []);
+
+  if (blogId) {
+    return <BlogDetailsClient id={blogId} />;
+  }
 
   const categories = [
     t("blog.cat_healthcare"),
@@ -40,7 +48,7 @@ export default function BlogPage() {
                   <small className="font-bold text-[#79259c]">{t("blog.featured_tag")}</small>
                   <h2 className="mt-3 max-w-xl font-serif text-2xl sm:text-3xl">{items[0].title}</h2>
                   <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600 sm:text-base">{items[0].excerpt}</p>
-                  <Link className="mt-5 inline-block font-bold text-[#79259c] hover:underline" href={"/blog/" + items[0].id}>
+                  <Link className="mt-5 inline-block font-bold text-[#79259c] hover:underline" href={"/blog?id=" + encodeURIComponent(items[0].id)}>
                     {t("blog.read_featured")}
                   </Link>
                 </article>
@@ -66,5 +74,13 @@ export default function BlogPage() {
         </aside>
       </main>
     </>
+  );
+}
+
+export default function BlogPage() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <BlogContent />
+    </Suspense>
   );
 }

@@ -13,7 +13,7 @@ export default function ProductCard({ product }) {
   return (
     <article className="group relative flex min-h-[250px] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white p-3 text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:min-h-[280px] sm:p-4">
       <Link
-        href={`/products/${productId}`}
+        href={`/products?id=${encodeURIComponent(productId)}`}
         className="flex flex-1 flex-col items-center text-center cursor-pointer no-underline"
       >
         <div className="grid h-32 w-full place-items-center overflow-hidden rounded-lg bg-gradient-to-br from-slate-50 to-[#fbf1fd] text-6xl sm:h-40 sm:text-7xl transition-transform duration-200 group-hover:scale-[1.03]">

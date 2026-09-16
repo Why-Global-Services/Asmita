@@ -65,7 +65,7 @@ export function QuickViewLegacy({ product, onClose }) {
               </Button>
 
               <a
-                href={`#/products/${product.id}`}
+                href={`/products?id=${encodeURIComponent(product.id)}`}
                 className="inline-flex w-full items-center justify-center rounded-md border border-[#79259c] px-5 py-2.5 text-sm font-bold text-[#79259c] transition hover:bg-[#faf4fc] sm:flex-1"
               >
                 Full Details

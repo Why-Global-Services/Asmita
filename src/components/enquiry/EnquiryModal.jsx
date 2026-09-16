@@ -23,7 +23,7 @@ export default function EnquiryModal({ product, onClose }) {
 
   if (!product) return null;
 
-  const productUrl = `${window.location.origin}${window.location.pathname}#/products/${product.id}`;
+  const productUrl = `${window.location.origin}${window.location.pathname}#/products?id=${encodeURIComponent(product.id)}`;
 
   const update = (event) => {
     setForm((current) => ({

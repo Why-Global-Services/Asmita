@@ -24,7 +24,7 @@ export default function BlogCard({ blog }) {
 
       <a
         className="mt-5 inline-flex items-center text-sm font-bold text-[#79259c] transition-colors hover:underline"
-        href={`#/blog/${blog.id}`}
+        href={`#/blog?id=${encodeURIComponent(blog.id)}`}
       >
         {t("blog.read_more")}
       </a>
